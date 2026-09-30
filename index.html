@@ -287,6 +287,18 @@ th{
   border-radius:7px;
 }
 
+.register-link{
+  text-align:center;
+  margin-top:14px;
+}
+.register-link button{
+  border:0;
+  background:transparent;
+  color:#2563eb;
+  font-weight:bold;
+  padding:5px;
+}
+
 @media(max-width:800px){
   header{flex-wrap:wrap}
   .mobile-menu{display:block}
@@ -321,96 +333,182 @@ footer{
 
 <!-- LOGIN -->
 <div id="loginBox">
+
   <div class="login-card">
+
     <h1>📚 Sistèm Aprantisaj</h1>
-    <p id="loginSubtitle">Konekte pou antre nan sistèm nan</p>
+
+    <p id="loginSubtitle">
+      Konekte pou antre nan sistèm nan
+    </p>
 
     <div id="loginMessage" class="message"></div>
 
     <div class="form-group">
       <label>Email</label>
-      <input type="email" id="email" placeholder="Antre email ou">
+      <input
+        type="email"
+        id="email"
+        placeholder="Antre email ou"
+        autocomplete="email"
+      >
     </div>
 
     <div class="form-group">
       <label>Modpas</label>
-      <input type="password" id="password" placeholder="Antre modpas ou">
+      <input
+        type="password"
+        id="password"
+        placeholder="Antre modpas ou"
+        autocomplete="current-password"
+      >
     </div>
 
     <div class="form-actions">
-      <button class="btn btn-primary" style="width:100%" onclick="loginEmail()">
+
+      <button
+        class="btn btn-primary"
+        style="width:100%"
+        onclick="loginEmail()"
+      >
         🔐 Konekte
       </button>
+
     </div>
 
-    <button class="btn btn-google" id="googleButton" onclick="loginGoogle()">
+    <button
+      class="btn btn-google"
+      id="googleButton"
+      onclick="loginGoogle()"
+    >
       🔵 Konekte ak Google
     </button>
 
-    <div class="lang">
-      <button onclick="setLanguage('ht')">Kreyòl</button>
-      <button onclick="setLanguage('fr')">Français</button>
+    <div class="register-link">
+      <button onclick="registerEmail()">
+        ➕ Kreye yon nouvo kont
+      </button>
     </div>
+
+    <div class="lang">
+      <button onclick="setLanguage('ht')">
+        Kreyòl
+      </button>
+
+      <button onclick="setLanguage('fr')">
+        Français
+      </button>
+    </div>
+
   </div>
+
 </div>
 
 <!-- APP -->
 <div id="app">
 
 <header>
+
   <div style="display:flex;align-items:center;gap:10px">
-    <button class="mobile-menu" onclick="toggleMenu()">☰</button>
-    <h1>📚 Sistèm Aprantisaj</h1>
+
+    <button
+      class="mobile-menu"
+      onclick="toggleMenu()"
+    >
+      ☰
+    </button>
+
+    <h1>
+      📚 Sistèm Aprantisaj
+    </h1>
+
   </div>
 
   <div class="user-area">
+
     <span id="userEmail"></span>
-    <span id="userRole" class="badge badge-user">Itilizatè</span>
-    <button onclick="logout()">Déconnexion</button>
+
+    <span
+      id="userRole"
+      class="badge badge-user"
+    >
+      Itilizatè
+    </span>
+
+    <button onclick="logout()">
+      Déconnexion
+    </button>
+
   </div>
+
 </header>
 
 <div class="layout">
 
-<aside class="sidebar" id="sidebar">
+<aside
+  class="sidebar"
+  id="sidebar"
+>
 
-  <button class="active" onclick="showSection('home',this)">
+  <button
+    class="active"
+    onclick="showSection('home',this)"
+  >
     🏠 Akèy
   </button>
 
-  <button onclick="showSection('eleves',this)">
+  <button
+    onclick="showSection('eleves',this)"
+  >
     👨‍🎓 Elèv
   </button>
 
-  <button onclick="showSection('professeurs',this)">
+  <button
+    onclick="showSection('professeurs',this)"
+  >
     👨‍🏫 Pwofesè
   </button>
 
-  <button onclick="showSection('classes',this)">
+  <button
+    onclick="showSection('classes',this)"
+  >
     🏫 Klas
   </button>
 
-  <button onclick="showSection('matieres',this)">
+  <button
+    onclick="showSection('matieres',this)"
+  >
     📚 Matyè
   </button>
 
-  <button onclick="showSection('devoirs',this)">
+  <button
+    onclick="showSection('devoirs',this)"
+  >
     📝 Devwa
   </button>
 
-  <button onclick="showSection('remises',this)">
+  <button
+    onclick="showSection('remises',this)"
+  >
     📤 Remèt
   </button>
 
-  <button onclick="showSection('resultats',this)">
+  <button
+    onclick="showSection('resultats',this)"
+  >
     📊 Rezilta
   </button>
 
-  <button onclick="showSection('statistiques',this)">
+  <button
+    onclick="showSection('statistiques',this)"
+  >
     📈 Estatistik
   </button>
 
-  <button onclick="showSection('users',this)" id="usersMenu">
+  <button
+    onclick="showSection('users',this)"
+    id="usersMenu"
+  >
     👥 Itilizatè
   </button>
 
@@ -419,7 +517,10 @@ footer{
 <main class="main">
 
 <!-- AKÈY -->
-<section id="home" class="section active">
+<section
+  id="home"
+  class="section active"
+>
 
   <div class="section-title">
     <h2>🏠 Akèy</h2>
@@ -429,38 +530,67 @@ footer{
 
     <div class="card">
       <h3>👨‍🎓 Total Elèv</h3>
-      <div class="number" id="statEleves">0</div>
+      <div
+        class="number"
+        id="statEleves"
+      >
+        0
+      </div>
     </div>
 
     <div class="card">
       <h3>👨‍🏫 Total Pwofesè</h3>
-      <div class="number" id="statProfesseurs">0</div>
+      <div
+        class="number"
+        id="statProfesseurs"
+      >
+        0
+      </div>
     </div>
 
     <div class="card">
       <h3>🏫 Total Klas</h3>
-      <div class="number" id="statClasses">0</div>
+      <div
+        class="number"
+        id="statClasses"
+      >
+        0
+      </div>
     </div>
 
     <div class="card">
       <h3>📝 Total Devwa</h3>
-      <div class="number" id="statDevoirs">0</div>
+      <div
+        class="number"
+        id="statDevoirs"
+      >
+        0
+      </div>
     </div>
 
   </div>
 
   <div class="panel">
-    <h3>📚 Byenveni nan Sistèm Aprantisaj</h3>
+
+    <h3>
+      📚 Byenveni nan Sistèm Aprantisaj
+    </h3>
+
     <p>
-      Sistèm sa a pèmèt ou jere elèv, pwofesè, klas,
-      matyè, devwa, remèt devwa ak rezilta.
+      Sistèm sa a pèmèt ou jere elèv,
+      pwofesè, klas, matyè, devwa,
+      remèt devwa ak rezilta.
     </p>
+
   </div>
 
 </section>
 
 <!-- ELÈV -->
-<section id="eleves" class="section">
+<section
+  id="eleves"
+  class="section"
+>
 
   <div class="section-title">
     <h2>👨‍🎓 Elèv</h2>
@@ -474,39 +604,62 @@ footer{
 
       <div class="form-group">
         <label>Non</label>
-        <input id="eleveNom" placeholder="Non elèv la">
+        <input
+          id="eleveNom"
+          placeholder="Non elèv la"
+        >
       </div>
 
       <div class="form-group">
         <label>Prénom</label>
-        <input id="elevePrenom" placeholder="Prénom">
+        <input
+          id="elevePrenom"
+          placeholder="Prénom"
+        >
       </div>
 
       <div class="form-group">
         <label>Email</label>
-        <input id="eleveEmail" type="email" placeholder="Email">
+        <input
+          id="eleveEmail"
+          type="email"
+          placeholder="Email"
+        >
       </div>
 
       <div class="form-group">
         <label>Klas</label>
-        <input id="eleveClasse" placeholder="Klas">
+        <input
+          id="eleveClasse"
+          placeholder="Klas"
+        >
       </div>
 
     </div>
 
     <div class="form-actions">
-      <button class="btn btn-primary" onclick="ajouterEleve()">
+
+      <button
+        class="btn btn-primary"
+        onclick="ajouterEleve()"
+      >
         ➕ Ajoute Elèv
       </button>
+
     </div>
 
   </div>
 
   <div class="panel">
+
     <h3>📋 Lis elèv yo</h3>
+
     <div class="table-wrap">
+
       <table>
+
         <thead>
+
           <tr>
             <th>Non</th>
             <th>Prénom</th>
@@ -514,16 +667,24 @@ footer{
             <th>Klas</th>
             <th>Aksyon</th>
           </tr>
+
         </thead>
+
         <tbody id="listeEleves"></tbody>
+
       </table>
+
     </div>
+
   </div>
 
 </section>
 
 <!-- PWOFESÈ -->
-<section id="professeurs" class="section">
+<section
+  id="professeurs"
+  class="section"
+>
 
   <div class="section-title">
     <h2>👨‍🏫 Pwofesè</h2>
@@ -537,40 +698,62 @@ footer{
 
       <div class="form-group">
         <label>Non</label>
-        <input id="profNom" placeholder="Non pwofesè a">
+        <input
+          id="profNom"
+          placeholder="Non pwofesè a"
+        >
       </div>
 
       <div class="form-group">
         <label>Prénom</label>
-        <input id="profPrenom" placeholder="Prénom">
+        <input
+          id="profPrenom"
+          placeholder="Prénom"
+        >
       </div>
 
       <div class="form-group">
         <label>Email</label>
-        <input id="profEmail" type="email" placeholder="Email">
+        <input
+          id="profEmail"
+          type="email"
+          placeholder="Email"
+        >
       </div>
 
       <div class="form-group">
         <label>Matyè</label>
-        <input id="profMatiere" placeholder="Matyè">
+        <input
+          id="profMatiere"
+          placeholder="Matyè"
+        >
       </div>
 
     </div>
 
     <div class="form-actions">
-      <button class="btn btn-primary" onclick="ajouterProfesseur()">
+
+      <button
+        class="btn btn-primary"
+        onclick="ajouterProfesseur()"
+      >
         ➕ Ajoute Pwofesè
       </button>
+
     </div>
 
   </div>
 
   <div class="panel">
+
     <h3>📋 Lis pwofesè yo</h3>
 
     <div class="table-wrap">
+
       <table>
+
         <thead>
+
           <tr>
             <th>Non</th>
             <th>Prénom</th>
@@ -578,9 +761,13 @@ footer{
             <th>Matyè</th>
             <th>Aksyon</th>
           </tr>
+
         </thead>
+
         <tbody id="listeProfesseurs"></tbody>
+
       </table>
+
     </div>
 
   </div>
@@ -588,7 +775,10 @@ footer{
 </section>
 
 <!-- KLAS -->
-<section id="classes" class="section">
+<section
+  id="classes"
+  class="section"
+>
 
   <div class="section-title">
     <h2>🏫 Klas</h2>
@@ -602,51 +792,77 @@ footer{
 
       <div class="form-group">
         <label>Non klas</label>
-        <input id="classeNom" placeholder="Egzanp: 7e AF">
+        <input
+          id="classeNom"
+          placeholder="Egzanp: 7e AF"
+        >
       </div>
 
       <div class="form-group">
         <label>Nivo</label>
-        <input id="classeNiveau" placeholder="Nivo">
+        <input
+          id="classeNiveau"
+          placeholder="Nivo"
+        >
       </div>
 
       <div class="form-group">
         <label>Pwofesè</label>
-        <input id="classeProf" placeholder="Pwofesè">
+        <input
+          id="classeProf"
+          placeholder="Pwofesè"
+        >
       </div>
 
     </div>
 
     <div class="form-actions">
-      <button class="btn btn-primary" onclick="ajouterClasse()">
+
+      <button
+        class="btn btn-primary"
+        onclick="ajouterClasse()"
+      >
         ➕ Ajoute Klas
       </button>
+
     </div>
 
   </div>
 
   <div class="panel">
+
     <h3>📋 Lis klas yo</h3>
 
     <div class="table-wrap">
+
       <table>
+
         <thead>
+
           <tr>
             <th>Non</th>
             <th>Nivo</th>
             <th>Pwofesè</th>
             <th>Aksyon</th>
           </tr>
+
         </thead>
+
         <tbody id="listeClasses"></tbody>
+
       </table>
+
     </div>
+
   </div>
 
 </section>
 
 <!-- MATYÈ -->
-<section id="matieres" class="section">
+<section
+  id="matieres"
+  class="section"
+>
 
   <div class="section-title">
     <h2>📚 Matyè</h2>
@@ -660,45 +876,68 @@ footer{
 
       <div class="form-group">
         <label>Non matyè</label>
-        <input id="matiereNom" placeholder="Egzanp: Matematik">
+        <input
+          id="matiereNom"
+          placeholder="Egzanp: Matematik"
+        >
       </div>
 
       <div class="form-group">
         <label>Kòd</label>
-        <input id="matiereCode" placeholder="MAT01">
+        <input
+          id="matiereCode"
+          placeholder="MAT01"
+        >
       </div>
 
     </div>
 
     <div class="form-actions">
-      <button class="btn btn-primary" onclick="ajouterMatiere()">
+
+      <button
+        class="btn btn-primary"
+        onclick="ajouterMatiere()"
+      >
         ➕ Ajoute Matyè
       </button>
+
     </div>
 
   </div>
 
   <div class="panel">
+
     <h3>📋 Lis matyè yo</h3>
 
     <div class="table-wrap">
+
       <table>
+
         <thead>
+
           <tr>
             <th>Non</th>
             <th>Kòd</th>
             <th>Aksyon</th>
           </tr>
+
         </thead>
+
         <tbody id="listeMatieres"></tbody>
+
       </table>
+
     </div>
+
   </div>
 
 </section>
 
 <!-- DEVWA -->
-<section id="devoirs" class="section">
+<section
+  id="devoirs"
+  class="section"
+>
 
   <div class="section-title">
     <h2>📝 Devwa</h2>
@@ -712,46 +951,76 @@ footer{
 
       <div class="form-group">
         <label>Tit devwa</label>
-        <input id="devoirTitre" placeholder="Tit devwa a">
+        <input
+          id="devoirTitre"
+          placeholder="Tit devwa a"
+        >
       </div>
 
       <div class="form-group">
         <label>Matyè</label>
-        <input id="devoirMatiere" placeholder="Matyè">
+        <input
+          id="devoirMatiere"
+          placeholder="Matyè"
+        >
       </div>
 
       <div class="form-group">
         <label>Klas</label>
-        <input id="devoirClasse" placeholder="Klas">
+        <input
+          id="devoirClasse"
+          placeholder="Klas"
+        >
       </div>
 
       <div class="form-group">
         <label>Dat limit</label>
-        <input id="devoirDate" type="date">
+        <input
+          id="devoirDate"
+          type="date"
+        >
       </div>
 
     </div>
 
-    <div class="form-group" style="margin-top:12px">
+    <div
+      class="form-group"
+      style="margin-top:12px"
+    >
+
       <label>Deskripsyon</label>
-      <textarea id="devoirDescription" rows="3"
-        placeholder="Deskripsyon devwa a"></textarea>
+
+      <textarea
+        id="devoirDescription"
+        rows="3"
+        placeholder="Deskripsyon devwa a"
+      ></textarea>
+
     </div>
 
     <div class="form-actions">
-      <button class="btn btn-primary" onclick="ajouterDevoir()">
+
+      <button
+        class="btn btn-primary"
+        onclick="ajouterDevoir()"
+      >
         ➕ Ajoute Devwa
       </button>
+
     </div>
 
   </div>
 
   <div class="panel">
+
     <h3>📋 Lis devwa yo</h3>
 
     <div class="table-wrap">
+
       <table>
+
         <thead>
+
           <tr>
             <th>Tit</th>
             <th>Matyè</th>
@@ -759,16 +1028,24 @@ footer{
             <th>Dat limit</th>
             <th>Aksyon</th>
           </tr>
+
         </thead>
+
         <tbody id="listeDevoirs"></tbody>
+
       </table>
+
     </div>
+
   </div>
 
 </section>
 
 <!-- REMÈT -->
-<section id="remises" class="section">
+<section
+  id="remises"
+  class="section"
+>
 
   <div class="section-title">
     <h2>📤 Remèt Devwa</h2>
@@ -782,41 +1059,64 @@ footer{
 
       <div class="form-group">
         <label>Elèv</label>
-        <input id="remiseEleve" placeholder="Non elèv">
+        <input
+          id="remiseEleve"
+          placeholder="Non elèv"
+        >
       </div>
 
       <div class="form-group">
         <label>Devwa</label>
-        <input id="remiseDevoir" placeholder="Devwa">
+        <input
+          id="remiseDevoir"
+          placeholder="Devwa"
+        >
       </div>
 
       <div class="form-group">
         <label>Nòt /100</label>
-        <input id="remiseNote" type="number" min="0" max="100"
-          placeholder="0 - 100">
+        <input
+          id="remiseNote"
+          type="number"
+          min="0"
+          max="100"
+          placeholder="0 - 100"
+        >
       </div>
 
       <div class="form-group">
         <label>Dat</label>
-        <input id="remiseDate" type="date">
+        <input
+          id="remiseDate"
+          type="date"
+        >
       </div>
 
     </div>
 
     <div class="form-actions">
-      <button class="btn btn-primary" onclick="ajouterRemise()">
+
+      <button
+        class="btn btn-primary"
+        onclick="ajouterRemise()"
+      >
         📤 Anrejistre Remèt
       </button>
+
     </div>
 
   </div>
 
   <div class="panel">
+
     <h3>📋 Lis remèt yo</h3>
 
     <div class="table-wrap">
+
       <table>
+
         <thead>
+
           <tr>
             <th>Elèv</th>
             <th>Devwa</th>
@@ -825,16 +1125,24 @@ footer{
             <th>Dat</th>
             <th>Aksyon</th>
           </tr>
+
         </thead>
+
         <tbody id="listeRemises"></tbody>
+
       </table>
+
     </div>
+
   </div>
 
 </section>
 
 <!-- REZILTA -->
-<section id="resultats" class="section">
+<section
+  id="resultats"
+  class="section"
+>
 
   <div class="section-title">
     <h2>📊 Rezilta</h2>
@@ -847,30 +1155,49 @@ footer{
     <div class="grid-form">
 
       <div class="form-group">
+
         <label>Non elèv</label>
-        <input id="rechercheEleve" placeholder="Non elèv">
+
+        <input
+          id="rechercheEleve"
+          placeholder="Non elèv"
+        >
+
       </div>
 
     </div>
 
     <div class="form-actions">
-      <button class="btn btn-primary" onclick="afficherResultat()">
+
+      <button
+        class="btn btn-primary"
+        onclick="afficherResultat()"
+      >
         🔎 Chèche
       </button>
+
     </div>
 
   </div>
 
-  <div id="resultatEleve" class="panel">
+  <div
+    id="resultatEleve"
+    class="panel"
+  >
+
     <div class="empty">
       Antre non yon elèv pou wè rezilta li.
     </div>
+
   </div>
 
 </section>
 
 <!-- ESTATISTIK -->
-<section id="statistiques" class="section">
+<section
+  id="statistiques"
+  class="section"
+>
 
   <div class="section-title">
     <h2>📈 Estatistik</h2>
@@ -879,23 +1206,55 @@ footer{
   <div class="cards">
 
     <div class="card">
+
       <h3>👨‍🎓 Elèv</h3>
-      <div class="number" id="totalElevesStat">0</div>
+
+      <div
+        class="number"
+        id="totalElevesStat"
+      >
+        0
+      </div>
+
     </div>
 
     <div class="card">
+
       <h3>👨‍🏫 Pwofesè</h3>
-      <div class="number" id="totalProfStat">0</div>
+
+      <div
+        class="number"
+        id="totalProfStat"
+      >
+        0
+      </div>
+
     </div>
 
     <div class="card">
+
       <h3>📝 Devwa</h3>
-      <div class="number" id="totalDevoirStat">0</div>
+
+      <div
+        class="number"
+        id="totalDevoirStat"
+      >
+        0
+      </div>
+
     </div>
 
     <div class="card">
+
       <h3>📈 Mwayèn</h3>
-      <div class="number" id="moyenneStat">0/100</div>
+
+      <div
+        class="number"
+        id="moyenneStat"
+      >
+        0/100
+      </div>
+
     </div>
 
   </div>
@@ -903,7 +1262,10 @@ footer{
 </section>
 
 <!-- USERS -->
-<section id="users" class="section">
+<section
+  id="users"
+  class="section"
+>
 
   <div class="section-title">
     <h2>👥 Itilizatè</h2>
@@ -911,15 +1273,23 @@ footer{
 
   <div class="panel">
 
-    <h3>👨‍💼 Administrasyon itilizatè</h3>
+    <h3>
+      👨‍💼 Administrasyon itilizatè
+    </h3>
 
-    <p style="margin-bottom:15px;color:#64748b">
-      Se administratè yo ki valide itilizatè ki an atant yo.
+    <p
+      style="margin-bottom:15px;color:#64748b"
+    >
+      Se administratè yo ki valide itilizatè
+      ki an atant yo.
     </p>
 
     <div class="table-wrap">
+
       <table>
+
         <thead>
+
           <tr>
             <th>Non</th>
             <th>Email</th>
@@ -927,9 +1297,13 @@ footer{
             <th>Estati</th>
             <th>Aksyon</th>
           </tr>
+
         </thead>
+
         <tbody id="listeUsers"></tbody>
+
       </table>
+
     </div>
 
   </div>
@@ -944,19 +1318,11 @@ footer{
 </div>
 </div>
 
-<!--
-  PATI 2 AP VIN LA:
-  Firebase
-  Authentication
-  Firestore
-  Admin
-  Itilizatè an atant
-  Fonksyon aplikasyon yo
--->
-  <script type="module">
+
+<script type="module">
 
 /* =========================================================
-   FIREBASE
+   FIREBASE IMPORT
 ========================================================= */
 
 import { initializeApp }
@@ -989,7 +1355,7 @@ from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
 /* =========================================================
-   CONFIGURATION FIREBASE
+   NOUVO CONFIG FIREBASE
 ========================================================= */
 
 const firebaseConfig = {
@@ -998,17 +1364,26 @@ const firebaseConfig = {
   projectId: "sistem-aprantisaj-rapid",
   storageBucket: "sistem-aprantisaj-rapid.firebasestorage.app",
   messagingSenderId: "369863005137",
-  appId: "1:369863005137:web:66d8e8d1c5f5e4b59b46f0",
-  measurementId: "G-98N95VTEP6"
+  appId: "1:369863005137:web:a78f295285144be19b46f0",
+  measurementId: "G-4FLZ95YX2F"
 };
 
-const appFirebase = initializeApp(firebaseConfig);
-const auth = getAuth(appFirebase);
-const db = getFirestore(appFirebase);
 
-const googleProvider = new GoogleAuthProvider();
+const appFirebase =
+  initializeApp(firebaseConfig);
+
+const auth =
+  getAuth(appFirebase);
+
+const db =
+  getFirestore(appFirebase);
+
+
+const googleProvider =
+  new GoogleAuthProvider();
+
 googleProvider.setCustomParameters({
-  prompt: "select_account"
+  prompt:"select_account"
 });
 
 
@@ -1028,33 +1403,53 @@ const collections = [
 let currentUser = null;
 let currentRole = "pending";
 
+
 function getData(key){
 
   try{
-    return JSON.parse(localStorage.getItem(key) || "[]");
-  }catch(e){
+
+    return JSON.parse(
+      localStorage.getItem(key) || "[]"
+    );
+
+  }catch(error){
+
     return [];
+
   }
 
 }
 
+
 function saveLocal(key,data){
 
-  localStorage.setItem(key,JSON.stringify(data));
+  localStorage.setItem(
+    key,
+    JSON.stringify(data)
+  );
 
 }
 
 
 /* =========================================================
-   MESSAGE LOGIN
+   MESSAGE
 ========================================================= */
 
-function showLoginMessage(message,type="error"){
+function showLoginMessage(
+  message,
+  type="error"
+){
 
-  const box = document.getElementById("loginMessage");
+  const box =
+    document.getElementById(
+      "loginMessage"
+    );
 
-  box.className = "message " + type;
-  box.textContent = message;
+  box.className =
+    "message " + type;
+
+  box.textContent =
+    message;
 
 }
 
@@ -1063,10 +1458,20 @@ function showLoginMessage(message,type="error"){
    LOGIN EMAIL
 ========================================================= */
 
-window.loginEmail = async function(){
+window.loginEmail =
+async function(){
 
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
+  const email =
+    document
+      .getElementById("email")
+      .value
+      .trim();
+
+  const password =
+    document
+      .getElementById("password")
+      .value;
+
 
   if(!email || !password){
 
@@ -1076,7 +1481,9 @@ window.loginEmail = async function(){
     );
 
     return;
+
   }
+
 
   try{
 
@@ -1091,25 +1498,220 @@ window.loginEmail = async function(){
       password
     );
 
+
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "LOGIN EMAIL ERROR:",
+      error
+    );
 
-    let msg = "Koneksyon an echwe.";
+    let msg =
+      "Koneksyon an echwe.";
 
-    if(error.code === "auth/invalid-credential"){
-      msg = "Email oswa modpas la pa kòrèk.";
+
+    if(
+      error.code ===
+      "auth/invalid-credential"
+    ){
+
+      msg =
+        "Email oswa modpas la pa kòrèk.";
+
     }
 
-    if(error.code === "auth/user-not-found"){
-      msg = "Kont sa a pa egziste.";
+    else if(
+      error.code ===
+      "auth/user-not-found"
+    ){
+
+      msg =
+        "Kont sa a pa egziste.";
+
     }
 
-    if(error.code === "auth/wrong-password"){
-      msg = "Modpas la pa kòrèk.";
+    else if(
+      error.code ===
+      "auth/wrong-password"
+    ){
+
+      msg =
+        "Modpas la pa kòrèk.";
+
     }
 
-    showLoginMessage(msg,"error");
+    else if(
+      error.code ===
+      "auth/invalid-email"
+    ){
+
+      msg =
+        "Email la pa valid.";
+
+    }
+
+    else if(
+      error.code ===
+      "auth/too-many-requests"
+    ){
+
+      msg =
+        "Gen twòp tantativ. Tann kèk minit epi eseye ankò.";
+
+    }
+
+    else if(
+      error.code ===
+      "auth/network-request-failed"
+    ){
+
+      msg =
+        "Pa gen koneksyon entènèt.";
+
+    }
+
+
+    showLoginMessage(
+      msg,
+      "error"
+    );
+
+  }
+
+};
+
+
+/* =========================================================
+   KREYE NOUVO KONT
+========================================================= */
+
+window.registerEmail =
+async function(){
+
+  const email =
+    document
+      .getElementById("email")
+      .value
+      .trim();
+
+  const password =
+    document
+      .getElementById("password")
+      .value;
+
+
+  if(!email || !password){
+
+    showLoginMessage(
+      "Antre email ak modpas ou anvan ou kreye kont lan.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  if(password.length < 6){
+
+    showLoginMessage(
+      "Modpas la dwe genyen omwen 6 karaktè.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    showLoginMessage(
+      "⏳ N ap kreye kont ou...",
+      "info"
+    );
+
+
+    const result =
+      await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+
+    const user =
+      result.user;
+
+
+    await createUserDocument(
+      user
+    );
+
+
+    showLoginMessage(
+      "✅ Kont la kreye. Kont ou ap tann validasyon administratè a.",
+      "success"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "REGISTER ERROR:",
+      error
+    );
+
+
+    let msg =
+      "Nou pa kapab kreye kont lan.";
+
+
+    if(
+      error.code ===
+      "auth/email-already-in-use"
+    ){
+
+      msg =
+        "Email sa a deja gen yon kont.";
+
+    }
+
+    else if(
+      error.code ===
+      "auth/invalid-email"
+    ){
+
+      msg =
+        "Email la pa valid.";
+
+    }
+
+    else if(
+      error.code ===
+      "auth/weak-password"
+    ){
+
+      msg =
+        "Modpas la twò fèb. Mete omwen 6 karaktè.";
+
+    }
+
+    else if(
+      error.code ===
+      "auth/network-request-failed"
+    ){
+
+      msg =
+        "Pa gen koneksyon entènèt.";
+
+    }
+
+
+    showLoginMessage(
+      msg,
+      "error"
+    );
 
   }
 
@@ -1120,7 +1722,8 @@ window.loginEmail = async function(){
    LOGIN GOOGLE
 ========================================================= */
 
-window.loginGoogle = async function(){
+window.loginGoogle =
+async function(){
 
   try{
 
@@ -1129,21 +1732,28 @@ window.loginGoogle = async function(){
       "info"
     );
 
-    await signInWithPopup(auth,googleProvider);
+
+    await signInWithPopup(
+      auth,
+      googleProvider
+    );
+
 
   }catch(error){
 
-    console.error("Google login:",error);
+    console.error(
+      "GOOGLE LOGIN:",
+      error
+    );
 
-    /*
-      Sou kèk telefòn Chrome popup la ka bloke.
-      Nan ka sa a nou itilize redirect.
-    */
 
     if(
-      error.code === "auth/popup-blocked" ||
-      error.code === "auth/popup-closed-by-user" ||
-      error.code === "auth/cancelled-popup-request"
+      error.code ===
+      "auth/popup-blocked" ||
+      error.code ===
+      "auth/popup-closed-by-user" ||
+      error.code ===
+      "auth/cancelled-popup-request"
     ){
 
       try{
@@ -1155,10 +1765,13 @@ window.loginGoogle = async function(){
 
       }catch(e){
 
-        console.error(e);
+        console.error(
+          "GOOGLE REDIRECT ERROR:",
+          e
+        );
 
         showLoginMessage(
-          "Google pa kapab konekte kounye a.",
+          getFirebaseErrorMessage(e),
           "error"
         );
 
@@ -1167,7 +1780,7 @@ window.loginGoogle = async function(){
     }else{
 
       showLoginMessage(
-        "Google pa kapab konekte kounye a.",
+        getFirebaseErrorMessage(error),
         "error"
       );
 
@@ -1179,13 +1792,16 @@ window.loginGoogle = async function(){
 
 
 /* =========================================================
-   GOOGLE REDIRECT
+   REDIRECT GOOGLE
 ========================================================= */
 
 getRedirectResult(auth)
 .then(result => {
 
-  if(result && result.user){
+  if(
+    result &&
+    result.user
+  ){
 
     console.log(
       "Google redirect OK:",
@@ -1198,7 +1814,7 @@ getRedirectResult(auth)
 .catch(error => {
 
   console.error(
-    "Redirect Google:",
+    "Google redirect result:",
     error
   );
 
@@ -1206,10 +1822,70 @@ getRedirectResult(auth)
 
 
 /* =========================================================
+   FIREBASE ERROR
+========================================================= */
+
+function getFirebaseErrorMessage(error){
+
+  if(!error){
+    return "Gen yon erè.";
+  }
+
+
+  if(
+    error.code ===
+    "auth/unauthorized-domain"
+  ){
+
+    return "Domèn sit la poko otorize nan Firebase Authentication.";
+
+  }
+
+
+  if(
+    error.code ===
+    "auth/operation-not-allowed"
+  ){
+
+    return "Metòd koneksyon sa a poko aktive nan Firebase.";
+
+  }
+
+
+  if(
+    error.code ===
+    "auth/popup-blocked"
+  ){
+
+    return "Navigatè a bloke fenèt Google la.";
+
+  }
+
+
+  if(
+    error.code ===
+    "auth/network-request-failed"
+  ){
+
+    return "Pa gen koneksyon entènèt.";
+
+  }
+
+
+  return (
+    error.message ||
+    "Firebase pa kapab fè koneksyon an."
+  );
+
+}
+
+
+/* =========================================================
    LOGOUT
 ========================================================= */
 
-window.logout = async function(){
+window.logout =
+async function(){
 
   try{
 
@@ -1219,7 +1895,10 @@ window.logout = async function(){
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "LOGOUT:",
+      error
+    );
 
   }
 
@@ -1234,26 +1913,32 @@ async function getUserData(uid){
 
   try{
 
-    const ref = doc(
-      db,
-      "users",
-      uid
-    );
+    const ref =
+      doc(
+        db,
+        "users",
+        uid
+      );
 
-    const snap = await getDoc(ref);
+    const snap =
+      await getDoc(ref);
 
-    if(snap.exists()){
+
+    if(
+      snap.exists()
+    ){
 
       return snap.data();
 
     }
+
 
     return null;
 
   }catch(error){
 
     console.error(
-      "Erreur users:",
+      "USER DATA ERROR:",
       error
     );
 
@@ -1265,31 +1950,48 @@ async function getUserData(uid){
 
 
 /* =========================================================
-   CREYE USER AUTOMATIKMAN
+   CREYE USER
 ========================================================= */
 
 async function createUserDocument(user){
 
-  const ref = doc(
-    db,
-    "users",
-    user.uid
-  );
+  const ref =
+    doc(
+      db,
+      "users",
+      user.uid
+    );
 
-  const snap = await getDoc(ref);
+
+  const snap =
+    await getDoc(ref);
+
 
   if(!snap.exists()){
 
-    await setDoc(ref,{
+    await setDoc(
+      ref,
+      {
 
-      uid:user.uid,
-      name:user.displayName || "Itilizatè",
-      email:user.email || "",
-      role:"pending",
-      status:"pending",
-      createdAt:new Date().toISOString()
+        uid:user.uid,
 
-    });
+        name:
+          user.displayName ||
+          "Itilizatè",
+
+        email:
+          user.email ||
+          "",
+
+        role:"pending",
+
+        status:"pending",
+
+        createdAt:
+          new Date().toISOString()
+
+      }
+    );
 
   }
 
@@ -1300,138 +2002,215 @@ async function createUserDocument(user){
    AUTH STATE
 ========================================================= */
 
-onAuthStateChanged(auth,async user => {
+onAuthStateChanged(
+  auth,
+  async user => {
 
-  try{
+    try{
 
-    if(!user){
+      if(!user){
 
-      currentUser = null;
+        currentUser =
+          null;
 
-      document.getElementById("loading").style.display="none";
-      document.getElementById("loginBox").style.display="flex";
-      document.getElementById("app").style.display="none";
+        document
+          .getElementById("loading")
+          .style.display =
+          "none";
 
-      return;
+        document
+          .getElementById("loginBox")
+          .style.display =
+          "flex";
 
-    }
+        document
+          .getElementById("app")
+          .style.display =
+          "none";
 
-    currentUser = user;
+        return;
 
-    console.log(
-      "Utilisateur connecté:",
-      user.email
-    );
+      }
 
-    await createUserDocument(user);
 
-    const userData =
-      await getUserData(user.uid);
+      currentUser =
+        user;
 
-    if(!userData){
 
-      document.getElementById("loading").style.display="none";
-      document.getElementById("loginBox").style.display="flex";
-
-      showLoginMessage(
-        "Yo pa jwenn enfòmasyon itilizatè a.",
-        "error"
+      console.log(
+        "Utilisateur connecté:",
+        user.email
       );
 
-      return;
 
-    }
-
-    currentRole =
-      userData.role || "pending";
-
-    document.getElementById(
-      "userEmail"
-    ).textContent =
-      user.email || "";
-
-    document.getElementById(
-      "userRole"
-    ).textContent =
-      getRoleName(currentRole);
+      await createUserDocument(
+        user
+      );
 
 
-    /* ADMIN */
+      const userData =
+        await getUserData(
+          user.uid
+        );
 
-    if(currentRole === "admin"){
+
+      if(!userData){
+
+        document
+          .getElementById("loading")
+          .style.display =
+          "none";
+
+        document
+          .getElementById("loginBox")
+          .style.display =
+          "flex";
+
+        showLoginMessage(
+          "Yo pa jwenn enfòmasyon itilizatè a.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      currentRole =
+        userData.role ||
+        "pending";
+
+
+      document
+        .getElementById("userEmail")
+        .textContent =
+        user.email || "";
+
+
+      document
+        .getElementById("userRole")
+        .textContent =
+        getRoleName(
+          currentRole
+        );
+
+
+      /* ADMIN */
+
+      if(
+        currentRole ===
+        "admin"
+      ){
+
+        openApplication();
+
+        await loadAllData();
+
+        return;
+
+      }
+
+
+      /* PENDING */
+
+      if(
+        currentRole === "pending" ||
+        userData.status === "pending"
+      ){
+
+        document
+          .getElementById("loading")
+          .style.display =
+          "none";
+
+        document
+          .getElementById("app")
+          .style.display =
+          "none";
+
+        document
+          .getElementById("loginBox")
+          .style.display =
+          "flex";
+
+        showLoginMessage(
+          "⏳ Kont ou an atant. Yon administratè dwe valide li.",
+          "info"
+        );
+
+        return;
+
+      }
+
+
+      /* OTHER USERS */
 
       openApplication();
 
       await loadAllData();
 
-      return;
 
-    }
+    }catch(error){
 
-
-    /* PENDING */
-
-    if(
-      currentRole === "pending" ||
-      userData.status === "pending"
-    ){
-
-      document.getElementById("loading").style.display="none";
-      document.getElementById("app").style.display="none";
-      document.getElementById("loginBox").style.display="flex";
-
-      showLoginMessage(
-        "⏳ Kont ou an atant. Yon administratè dwe valide li.",
-        "info"
+      console.error(
+        "AUTH STATE ERROR:",
+        error
       );
 
-      return;
+
+      document
+        .getElementById("loading")
+        .style.display =
+        "none";
+
+
+      document
+        .getElementById("app")
+        .style.display =
+        "none";
+
+
+      document
+        .getElementById("loginBox")
+        .style.display =
+        "flex";
+
+
+      showLoginMessage(
+        "Erè Firebase: " +
+        getFirebaseErrorMessage(error),
+        "error"
+      );
 
     }
 
-
-    /* OTHER USERS */
-
-    openApplication();
-
-    await loadAllData();
-
-  }catch(error){
-
-    console.error(
-      "Auth state error:",
-      error
-    );
-
-    document.getElementById("loading").style.display="none";
-
-    showLoginMessage(
-      "Gen yon pwoblèm pandan koneksyon an.",
-      "error"
-    );
-
   }
-
-});
+);
 
 
 /* =========================================================
-   OUVRI APPLICATION
+   OUVRI APP
 ========================================================= */
 
 function openApplication(){
 
-  document.getElementById(
-    "loading"
-  ).style.display="none";
+  document
+    .getElementById("loading")
+    .style.display =
+    "none";
 
-  document.getElementById(
-    "loginBox"
-  ).style.display="none";
 
-  document.getElementById(
-    "app"
-  ).style.display="block";
+  document
+    .getElementById("loginBox")
+    .style.display =
+    "none";
+
+
+  document
+    .getElementById("app")
+    .style.display =
+    "block";
+
 
   updatePermissions();
 
@@ -1444,14 +2223,32 @@ function openApplication(){
 
 function getRoleName(role){
 
-  if(role === "admin")
+  if(
+    role === "admin"
+  ){
+
     return "Admin";
 
-  if(role === "teacher")
+  }
+
+
+  if(
+    role === "teacher"
+  ){
+
     return "Pwofesè";
 
-  if(role === "student")
+  }
+
+
+  if(
+    role === "student"
+  ){
+
     return "Elèv";
+
+  }
+
 
   return "Itilizatè";
 
@@ -1465,17 +2262,24 @@ function getRoleName(role){
 function updatePermissions(){
 
   const usersMenu =
-    document.getElementById("usersMenu");
+    document.getElementById(
+      "usersMenu"
+    );
+
 
   if(usersMenu){
 
-    if(currentRole === "admin"){
+    if(
+      currentRole === "admin"
+    ){
 
-      usersMenu.style.display="block";
+      usersMenu.style.display =
+        "block";
 
     }else{
 
-      usersMenu.style.display="none";
+      usersMenu.style.display =
+        "none";
 
     }
 
@@ -1488,42 +2292,60 @@ function updatePermissions(){
    NAVIGATION
 ========================================================= */
 
-window.showSection = function(id,button){
+window.showSection =
+function(id,button){
 
   document
     .querySelectorAll(".section")
     .forEach(section => {
 
-      section.classList.remove("active");
+      section.classList.remove(
+        "active"
+      );
 
     });
+
 
   const target =
     document.getElementById(id);
 
+
   if(target){
 
-    target.classList.add("active");
+    target.classList.add(
+      "active"
+    );
 
   }
 
+
   document
-    .querySelectorAll(".sidebar button")
+    .querySelectorAll(
+      ".sidebar button"
+    )
     .forEach(btn => {
 
-      btn.classList.remove("active");
+      btn.classList.remove(
+        "active"
+      );
 
     });
 
+
   if(button){
 
-    button.classList.add("active");
+    button.classList.add(
+      "active"
+    );
 
   }
 
+
   document
     .getElementById("sidebar")
-    .classList.remove("open");
+    .classList.remove(
+      "open"
+    );
 
 };
 
@@ -1532,11 +2354,14 @@ window.showSection = function(id,button){
    MOBILE MENU
 ========================================================= */
 
-window.toggleMenu = function(){
+window.toggleMenu =
+function(){
 
   document
     .getElementById("sidebar")
-    .classList.toggle("open");
+    .classList.toggle(
+      "open"
+    );
 
 };
 
@@ -1545,20 +2370,23 @@ window.toggleMenu = function(){
    LANGUAGE
 ========================================================= */
 
-window.setLanguage = function(lang){
+window.setLanguage =
+function(lang){
 
-  if(lang === "fr"){
+  if(
+    lang === "fr"
+  ){
 
-    document.getElementById(
-      "loginSubtitle"
-    ).textContent =
+    document
+      .getElementById("loginSubtitle")
+      .textContent =
       "Connectez-vous pour accéder au système";
 
   }else{
 
-    document.getElementById(
-      "loginSubtitle"
-    ).textContent =
+    document
+      .getElementById("loginSubtitle")
+      .textContent =
       "Konekte pou antre nan sistèm nan";
 
   }
@@ -1572,7 +2400,8 @@ window.setLanguage = function(lang){
 
 function newId(){
 
-  return Date.now().toString();
+  return Date.now()
+    .toString();
 
 }
 
@@ -1594,11 +2423,14 @@ async function saveToFirestore(
 
   }
 
-  const ref = doc(
-    db,
-    collectionName,
-    String(item.id)
-  );
+
+  const ref =
+    doc(
+      db,
+      collectionName,
+      String(item.id)
+    );
+
 
   await setDoc(
     ref,
@@ -1620,31 +2452,41 @@ async function loadCollection(
 
     const snapshot =
       await getDocs(
-        collection(db,collectionName)
+        collection(
+          db,
+          collectionName
+        )
       );
+
 
     const data=[];
 
+
     snapshot.forEach(item => {
 
-      data.push(item.data());
+      data.push(
+        item.data()
+      );
 
     });
+
 
     saveLocal(
       collectionName,
       data
     );
 
+
     return data;
 
   }catch(error){
 
     console.error(
-      "Load error:",
+      "LOAD ERROR:",
       collectionName,
       error
     );
+
 
     return getData(
       collectionName
@@ -1665,13 +2507,20 @@ async function loadAllData(){
     const name of collections
   ){
 
-    await loadCollection(name);
+    await loadCollection(
+      name
+    );
 
   }
 
+
   actualiserTout();
 
-  if(currentRole === "admin"){
+
+  if(
+    currentRole ===
+    "admin"
+  ){
 
     await loadUsers();
 
@@ -1684,14 +2533,21 @@ async function loadAllData(){
    ACTUALISER
 ========================================================= */
 
-window.actualiserTout = function(){
+window.actualiserTout =
+function(){
 
   afficherEleves();
+
   afficherProfesseurs();
+
   afficherClasses();
+
   afficherMatieres();
+
   afficherDevoirs();
+
   afficherRemises();
+
   updateStatistics();
 
 };
@@ -1701,38 +2557,68 @@ window.actualiserTout = function(){
    ELÈV
 ========================================================= */
 
-window.ajouterEleve = async function(){
+window.ajouterEleve =
+async function(){
 
   const nom =
-    document.getElementById("eleveNom").value.trim();
+    document
+      .getElementById("eleveNom")
+      .value
+      .trim();
+
 
   const prenom =
-    document.getElementById("elevePrenom").value.trim();
+    document
+      .getElementById("elevePrenom")
+      .value
+      .trim();
+
 
   const email =
-    document.getElementById("eleveEmail").value.trim();
+    document
+      .getElementById("eleveEmail")
+      .value
+      .trim();
+
 
   const classe =
-    document.getElementById("eleveClasse").value.trim();
+    document
+      .getElementById("eleveClasse")
+      .value
+      .trim();
 
-  if(!nom || !prenom){
 
-    alert("Tanpri antre non ak prénom elèv la.");
+  if(
+    !nom ||
+    !prenom
+  ){
+
+    alert(
+      "Tanpri antre non ak prénom elèv la."
+    );
 
     return;
 
   }
 
-  const item={
+
+  const item = {
 
     id:newId(),
+
     nom,
+
     prenom,
+
     email,
+
     classe,
-    createdAt:new Date().toISOString()
+
+    createdAt:
+      new Date().toISOString()
 
   };
+
 
   try{
 
@@ -1741,37 +2627,51 @@ window.ajouterEleve = async function(){
       item
     );
 
+
     const data =
-      getData("eleves");
+      getData(
+        "eleves"
+      );
+
 
     data.push(item);
+
 
     saveLocal(
       "eleves",
       data
     );
 
-    document.getElementById(
-      "eleveNom"
-    ).value="";
 
-    document.getElementById(
-      "elevePrenom"
-    ).value="";
+    document
+      .getElementById("eleveNom")
+      .value="";
 
-    document.getElementById(
-      "eleveEmail"
-    ).value="";
 
-    document.getElementById(
-      "eleveClasse"
-    ).value="";
+    document
+      .getElementById("elevePrenom")
+      .value="";
+
+
+    document
+      .getElementById("eleveEmail")
+      .value="";
+
+
+    document
+      .getElementById("eleveClasse")
+      .value="";
+
 
     afficherEleves();
 
     updateStatistics();
 
-    alert("Elèv la ajoute avèk siksè.");
+
+    alert(
+      "Elèv la ajoute avèk siksè."
+    );
+
 
   }catch(error){
 
@@ -1790,48 +2690,66 @@ window.ajouterEleve = async function(){
    AFFICHER ELÈV
 ========================================================= */
 
-window.afficherEleves = function(){
+window.afficherEleves =
+function(){
 
   const tbody =
     document.getElementById(
       "listeEleves"
     );
 
+
   if(!tbody) return;
+
 
   const data =
     getData("eleves");
 
+
   if(!data.length){
 
     tbody.innerHTML =
-      `<tr><td colspan="5" class="empty">
-        Pa gen elèv ankò.
-      </td></tr>`;
+      `<tr>
+        <td colspan="5" class="empty">
+          Pa gen elèv ankò.
+        </td>
+      </tr>`;
 
     return;
 
   }
+
 
   tbody.innerHTML =
     data.map(item => `
 
       <tr>
 
-        <td>${escapeHtml(item.nom)}</td>
-
-        <td>${escapeHtml(item.prenom)}</td>
-
-        <td>${escapeHtml(item.email || "")}</td>
-
-        <td>${escapeHtml(item.classe || "")}</td>
+        <td>
+          ${escapeHtml(item.nom)}
+        </td>
 
         <td>
+          ${escapeHtml(item.prenom)}
+        </td>
+
+        <td>
+          ${escapeHtml(item.email || "")}
+        </td>
+
+        <td>
+          ${escapeHtml(item.classe || "")}
+        </td>
+
+        <td>
+
           <button
             class="btn btn-danger"
-            onclick="supprimerItem('eleves','${item.id}')">
+            onclick="supprimerItem('eleves','${item.id}')"
+          >
             🗑️
           </button>
+
         </td>
 
       </tr>
@@ -1845,21 +2763,41 @@ window.afficherEleves = function(){
    PWOFESÈ
 ========================================================= */
 
-window.ajouterProfesseur = async function(){
+window.ajouterProfesseur =
+async function(){
 
   const nom =
-    document.getElementById("profNom").value.trim();
+    document
+      .getElementById("profNom")
+      .value
+      .trim();
+
 
   const prenom =
-    document.getElementById("profPrenom").value.trim();
+    document
+      .getElementById("profPrenom")
+      .value
+      .trim();
+
 
   const email =
-    document.getElementById("profEmail").value.trim();
+    document
+      .getElementById("profEmail")
+      .value
+      .trim();
+
 
   const matiere =
-    document.getElementById("profMatiere").value.trim();
+    document
+      .getElementById("profMatiere")
+      .value
+      .trim();
 
-  if(!nom || !prenom){
+
+  if(
+    !nom ||
+    !prenom
+  ){
 
     alert(
       "Tanpri antre non ak prénom pwofesè a."
@@ -1869,16 +2807,24 @@ window.ajouterProfesseur = async function(){
 
   }
 
-  const item={
+
+  const item = {
 
     id:newId(),
+
     nom,
+
     prenom,
+
     email,
+
     matiere,
-    createdAt:new Date().toISOString()
+
+    createdAt:
+      new Date().toISOString()
 
   };
+
 
   try{
 
@@ -1887,25 +2833,51 @@ window.ajouterProfesseur = async function(){
       item
     );
 
+
     const data =
-      getData("professeurs");
+      getData(
+        "professeurs"
+      );
+
 
     data.push(item);
+
 
     saveLocal(
       "professeurs",
       data
     );
 
-    document.getElementById("profNom").value="";
-    document.getElementById("profPrenom").value="";
-    document.getElementById("profEmail").value="";
-    document.getElementById("profMatiere").value="";
+
+    document
+      .getElementById("profNom")
+      .value="";
+
+
+    document
+      .getElementById("profPrenom")
+      .value="";
+
+
+    document
+      .getElementById("profEmail")
+      .value="";
+
+
+    document
+      .getElementById("profMatiere")
+      .value="";
+
 
     afficherProfesseurs();
+
     updateStatistics();
 
-    alert("Pwofesè a ajoute avèk siksè.");
+
+    alert(
+      "Pwofesè a ajoute avèk siksè."
+    );
+
 
   }catch(error){
 
@@ -1924,47 +2896,65 @@ window.ajouterProfesseur = async function(){
    AFFICHER PWOFESÈ
 ========================================================= */
 
-window.afficherProfesseurs = function(){
+window.afficherProfesseurs =
+function(){
 
   const tbody =
     document.getElementById(
       "listeProfesseurs"
     );
 
+
   if(!tbody) return;
 
+
   const data =
-    getData("professeurs");
+    getData(
+      "professeurs"
+    );
+
 
   if(!data.length){
 
     tbody.innerHTML =
-      `<tr><td colspan="5" class="empty">
-        Pa gen pwofesè ankò.
-      </td></tr>`;
+      `<tr>
+        <td colspan="5" class="empty">
+          Pa gen pwofesè ankò.
+        </td>
+      </tr>`;
 
     return;
 
   }
+
 
   tbody.innerHTML =
     data.map(item => `
 
       <tr>
 
-        <td>${escapeHtml(item.nom)}</td>
+        <td>
+          ${escapeHtml(item.nom)}
+        </td>
 
-        <td>${escapeHtml(item.prenom)}</td>
+        <td>
+          ${escapeHtml(item.prenom)}
+        </td>
 
-        <td>${escapeHtml(item.email || "")}</td>
+        <td>
+          ${escapeHtml(item.email || "")}
+        </td>
 
-        <td>${escapeHtml(item.matiere || "")}</td>
+        <td>
+          ${escapeHtml(item.matiere || "")}
+        </td>
 
         <td>
 
           <button
             class="btn btn-danger"
-            onclick="supprimerItem('professeurs','${item.id}')">
+            onclick="supprimerItem('professeurs','${item.id}')"
+          >
             🗑️
           </button>
 
@@ -1981,34 +2971,56 @@ window.afficherProfesseurs = function(){
    KLAS
 ========================================================= */
 
-window.ajouterClasse = async function(){
+window.ajouterClasse =
+async function(){
 
   const nom =
-    document.getElementById("classeNom").value.trim();
+    document
+      .getElementById("classeNom")
+      .value
+      .trim();
+
 
   const niveau =
-    document.getElementById("classeNiveau").value.trim();
+    document
+      .getElementById("classeNiveau")
+      .value
+      .trim();
+
 
   const prof =
-    document.getElementById("classeProf").value.trim();
+    document
+      .getElementById("classeProf")
+      .value
+      .trim();
+
 
   if(!nom){
 
-    alert("Tanpri mete non klas la.");
+    alert(
+      "Tanpri mete non klas la."
+    );
 
     return;
 
   }
 
-  const item={
+
+  const item = {
 
     id:newId(),
+
     nom,
+
     niveau,
+
     prof,
-    createdAt:new Date().toISOString()
+
+    createdAt:
+      new Date().toISOString()
 
   };
+
 
   try{
 
@@ -2017,24 +3029,44 @@ window.ajouterClasse = async function(){
       item
     );
 
+
     const data =
       getData("classes");
 
+
     data.push(item);
+
 
     saveLocal(
       "classes",
       data
     );
 
-    document.getElementById("classeNom").value="";
-    document.getElementById("classeNiveau").value="";
-    document.getElementById("classeProf").value="";
+
+    document
+      .getElementById("classeNom")
+      .value="";
+
+
+    document
+      .getElementById("classeNiveau")
+      .value="";
+
+
+    document
+      .getElementById("classeProf")
+      .value="";
+
 
     afficherClasses();
+
     updateStatistics();
 
-    alert("Klas la ajoute avèk siksè.");
+
+    alert(
+      "Klas la ajoute avèk siksè."
+    );
+
 
   }catch(error){
 
@@ -2053,45 +3085,61 @@ window.ajouterClasse = async function(){
    AFFICHER KLAS
 ========================================================= */
 
-window.afficherClasses = function(){
+window.afficherClasses =
+function(){
 
   const tbody =
     document.getElementById(
       "listeClasses"
     );
 
+
   if(!tbody) return;
 
+
   const data =
-    getData("classes");
+    getData(
+      "classes"
+    );
+
 
   if(!data.length){
 
     tbody.innerHTML =
-      `<tr><td colspan="4" class="empty">
-        Pa gen klas ankò.
-      </td></tr>`;
+      `<tr>
+        <td colspan="4" class="empty">
+          Pa gen klas ankò.
+        </td>
+      </tr>`;
 
     return;
 
   }
+
 
   tbody.innerHTML =
     data.map(item => `
 
       <tr>
 
-        <td>${escapeHtml(item.nom)}</td>
+        <td>
+          ${escapeHtml(item.nom)}
+        </td>
 
-        <td>${escapeHtml(item.niveau || "")}</td>
+        <td>
+          ${escapeHtml(item.niveau || "")}
+        </td>
 
-        <td>${escapeHtml(item.prof || "")}</td>
+        <td>
+          ${escapeHtml(item.prof || "")}
+        </td>
 
         <td>
 
           <button
             class="btn btn-danger"
-            onclick="supprimerItem('classes','${item.id}')">
+            onclick="supprimerItem('classes','${item.id}')"
+          >
             🗑️
           </button>
 
@@ -2108,30 +3156,47 @@ window.afficherClasses = function(){
    MATYÈ
 ========================================================= */
 
-window.ajouterMatiere = async function(){
+window.ajouterMatiere =
+async function(){
 
   const nom =
-    document.getElementById("matiereNom").value.trim();
+    document
+      .getElementById("matiereNom")
+      .value
+      .trim();
+
 
   const code =
-    document.getElementById("matiereCode").value.trim();
+    document
+      .getElementById("matiereCode")
+      .value
+      .trim();
+
 
   if(!nom){
 
-    alert("Tanpri mete non matyè a.");
+    alert(
+      "Tanpri mete non matyè a."
+    );
 
     return;
 
   }
 
-  const item={
+
+  const item = {
 
     id:newId(),
+
     nom,
+
     code,
-    createdAt:new Date().toISOString()
+
+    createdAt:
+      new Date().toISOString()
 
   };
+
 
   try{
 
@@ -2140,27 +3205,39 @@ window.ajouterMatiere = async function(){
       item
     );
 
+
     const data =
-      getData("matieres");
+      getData(
+        "matieres"
+      );
+
 
     data.push(item);
+
 
     saveLocal(
       "matieres",
       data
     );
 
-    document.getElementById(
-      "matiereNom"
-    ).value="";
 
-    document.getElementById(
-      "matiereCode"
-    ).value="";
+    document
+      .getElementById("matiereNom")
+      .value="";
+
+
+    document
+      .getElementById("matiereCode")
+      .value="";
+
 
     afficherMatieres();
 
-    alert("Matyè a ajoute avèk siksè.");
+
+    alert(
+      "Matyè a ajoute avèk siksè."
+    );
+
 
   }catch(error){
 
@@ -2179,43 +3256,57 @@ window.ajouterMatiere = async function(){
    AFFICHER MATYÈ
 ========================================================= */
 
-window.afficherMatieres = function(){
+window.afficherMatieres =
+function(){
 
   const tbody =
     document.getElementById(
       "listeMatieres"
     );
 
+
   if(!tbody) return;
 
+
   const data =
-    getData("matieres");
+    getData(
+      "matieres"
+    );
+
 
   if(!data.length){
 
     tbody.innerHTML =
-      `<tr><td colspan="3" class="empty">
-        Pa gen matyè ankò.
-      </td></tr>`;
+      `<tr>
+        <td colspan="3" class="empty">
+          Pa gen matyè ankò.
+        </td>
+      </tr>`;
 
     return;
 
   }
+
 
   tbody.innerHTML =
     data.map(item => `
 
       <tr>
 
-        <td>${escapeHtml(item.nom)}</td>
+        <td>
+          ${escapeHtml(item.nom)}
+        </td>
 
-        <td>${escapeHtml(item.code || "")}</td>
+        <td>
+          ${escapeHtml(item.code || "")}
+        </td>
 
         <td>
 
           <button
             class="btn btn-danger"
-            onclick="supprimerItem('matieres','${item.id}')">
+            onclick="supprimerItem('matieres','${item.id}')"
+          >
             🗑️
           </button>
 
@@ -2232,44 +3323,75 @@ window.afficherMatieres = function(){
    DEVWA
 ========================================================= */
 
-window.ajouterDevoir = async function(){
+window.ajouterDevoir =
+async function(){
 
   const titre =
-    document.getElementById("devoirTitre").value.trim();
+    document
+      .getElementById("devoirTitre")
+      .value
+      .trim();
+
 
   const matiere =
-    document.getElementById("devoirMatiere").value.trim();
+    document
+      .getElementById("devoirMatiere")
+      .value
+      .trim();
+
 
   const classe =
-    document.getElementById("devoirClasse").value.trim();
+    document
+      .getElementById("devoirClasse")
+      .value
+      .trim();
+
 
   const date =
-    document.getElementById("devoirDate").value;
+    document
+      .getElementById("devoirDate")
+      .value;
+
 
   const description =
-    document.getElementById(
-      "devoirDescription"
-    ).value.trim();
+    document
+      .getElementById(
+        "devoirDescription"
+      )
+      .value
+      .trim();
+
 
   if(!titre){
 
-    alert("Tanpri mete tit devwa a.");
+    alert(
+      "Tanpri mete tit devwa a."
+    );
 
     return;
 
   }
 
-  const item={
+
+  const item = {
 
     id:newId(),
+
     titre,
+
     matiere,
+
     classe,
+
     date,
+
     description,
-    createdAt:new Date().toISOString()
+
+    createdAt:
+      new Date().toISOString()
 
   };
+
 
   try{
 
@@ -2278,26 +3400,58 @@ window.ajouterDevoir = async function(){
       item
     );
 
+
     const data =
-      getData("devoirs");
+      getData(
+        "devoirs"
+      );
+
 
     data.push(item);
+
 
     saveLocal(
       "devoirs",
       data
     );
 
-    document.getElementById("devoirTitre").value="";
-    document.getElementById("devoirMatiere").value="";
-    document.getElementById("devoirClasse").value="";
-    document.getElementById("devoirDate").value="";
-    document.getElementById("devoirDescription").value="";
+
+    document
+      .getElementById("devoirTitre")
+      .value="";
+
+
+    document
+      .getElementById("devoirMatiere")
+      .value="";
+
+
+    document
+      .getElementById("devoirClasse")
+      .value="";
+
+
+    document
+      .getElementById("devoirDate")
+      .value="";
+
+
+    document
+      .getElementById(
+        "devoirDescription"
+      )
+      .value="";
+
 
     afficherDevoirs();
+
     updateStatistics();
 
-    alert("Devwa a ajoute avèk siksè.");
+
+    alert(
+      "Devwa a ajoute avèk siksè."
+    );
+
 
   }catch(error){
 
@@ -2316,47 +3470,65 @@ window.ajouterDevoir = async function(){
    AFFICHER DEVWA
 ========================================================= */
 
-window.afficherDevoirs = function(){
+window.afficherDevoirs =
+function(){
 
   const tbody =
     document.getElementById(
       "listeDevoirs"
     );
 
+
   if(!tbody) return;
 
+
   const data =
-    getData("devoirs");
+    getData(
+      "devoirs"
+    );
+
 
   if(!data.length){
 
     tbody.innerHTML =
-      `<tr><td colspan="5" class="empty">
-        Pa gen devwa ankò.
-      </td></tr>`;
+      `<tr>
+        <td colspan="5" class="empty">
+          Pa gen devwa ankò.
+        </td>
+      </tr>`;
 
     return;
 
   }
+
 
   tbody.innerHTML =
     data.map(item => `
 
       <tr>
 
-        <td>${escapeHtml(item.titre)}</td>
+        <td>
+          ${escapeHtml(item.titre)}
+        </td>
 
-        <td>${escapeHtml(item.matiere || "")}</td>
+        <td>
+          ${escapeHtml(item.matiere || "")}
+        </td>
 
-        <td>${escapeHtml(item.classe || "")}</td>
+        <td>
+          ${escapeHtml(item.classe || "")}
+        </td>
 
-        <td>${escapeHtml(item.date || "")}</td>
+        <td>
+          ${escapeHtml(item.date || "")}
+        </td>
 
         <td>
 
           <button
             class="btn btn-danger"
-            onclick="supprimerItem('devoirs','${item.id}')">
+            onclick="supprimerItem('devoirs','${item.id}')"
+          >
             🗑️
           </button>
 
@@ -2373,31 +3545,49 @@ window.afficherDevoirs = function(){
    REMÈT
 ========================================================= */
 
-window.ajouterRemise = async function(){
+window.ajouterRemise =
+async function(){
 
   const eleve =
-    document.getElementById(
-      "remiseEleve"
-    ).value.trim();
+    document
+      .getElementById(
+        "remiseEleve"
+      )
+      .value
+      .trim();
+
 
   const devoir =
-    document.getElementById(
-      "remiseDevoir"
-    ).value.trim();
+    document
+      .getElementById(
+        "remiseDevoir"
+      )
+      .value
+      .trim();
+
 
   const note100 =
     Number(
-      document.getElementById(
-        "remiseNote"
-      ).value
+      document
+        .getElementById(
+          "remiseNote"
+        )
+        .value
     );
 
-  const date =
-    document.getElementById(
-      "remiseDate"
-    ).value;
 
-  if(!eleve || !devoir){
+  const date =
+    document
+      .getElementById(
+        "remiseDate"
+      )
+      .value;
+
+
+  if(
+    !eleve ||
+    !devoir
+  ){
 
     alert(
       "Tanpri antre elèv ak devwa."
@@ -2406,6 +3596,7 @@ window.ajouterRemise = async function(){
     return;
 
   }
+
 
   if(
     isNaN(note100) ||
@@ -2421,22 +3612,32 @@ window.ajouterRemise = async function(){
 
   }
 
+
   const note20 =
     Math.round(
       (note100 / 5) * 100
     ) / 100;
 
-  const item={
+
+  const item = {
 
     id:newId(),
+
     eleve,
+
     devoir,
+
     note100,
+
     note20,
+
     date,
-    createdAt:new Date().toISOString()
+
+    createdAt:
+      new Date().toISOString()
 
   };
+
 
   try{
 
@@ -2445,39 +3646,59 @@ window.ajouterRemise = async function(){
       item
     );
 
+
     const data =
-      getData("remises");
+      getData(
+        "remises"
+      );
+
 
     data.push(item);
+
 
     saveLocal(
       "remises",
       data
     );
 
-    document.getElementById(
-      "remiseEleve"
-    ).value="";
 
-    document.getElementById(
-      "remiseDevoir"
-    ).value="";
+    document
+      .getElementById(
+        "remiseEleve"
+      )
+      .value="";
 
-    document.getElementById(
-      "remiseNote"
-    ).value="";
 
-    document.getElementById(
-      "remiseDate"
-    ).value="";
+    document
+      .getElementById(
+        "remiseDevoir"
+      )
+      .value="";
+
+
+    document
+      .getElementById(
+        "remiseNote"
+      )
+      .value="";
+
+
+    document
+      .getElementById(
+        "remiseDate"
+      )
+      .value="";
+
 
     afficherRemises();
 
     updateStatistics();
 
+
     alert(
       "Remèt la anrejistre avèk siksè."
     );
+
 
   }catch(error){
 
@@ -2496,49 +3717,69 @@ window.ajouterRemise = async function(){
    AFFICHER REMÈT
 ========================================================= */
 
-window.afficherRemises = function(){
+window.afficherRemises =
+function(){
 
   const tbody =
     document.getElementById(
       "listeRemises"
     );
 
+
   if(!tbody) return;
 
+
   const data =
-    getData("remises");
+    getData(
+      "remises"
+    );
+
 
   if(!data.length){
 
     tbody.innerHTML =
-      `<tr><td colspan="6" class="empty">
-        Pa gen remèt ankò.
-      </td></tr>`;
+      `<tr>
+        <td colspan="6" class="empty">
+          Pa gen remèt ankò.
+        </td>
+      </tr>`;
 
     return;
 
   }
+
 
   tbody.innerHTML =
     data.map(item => `
 
       <tr>
 
-        <td>${escapeHtml(item.eleve)}</td>
+        <td>
+          ${escapeHtml(item.eleve)}
+        </td>
 
-        <td>${escapeHtml(item.devoir)}</td>
+        <td>
+          ${escapeHtml(item.devoir)}
+        </td>
 
-        <td>${item.note100}</td>
+        <td>
+          ${item.note100}
+        </td>
 
-        <td>${item.note20}/20</td>
+        <td>
+          ${item.note20}/20
+        </td>
 
-        <td>${escapeHtml(item.date || "")}</td>
+        <td>
+          ${escapeHtml(item.date || "")}
+        </td>
 
         <td>
 
           <button
             class="btn btn-danger"
-            onclick="supprimerItem('remises','${item.id}')">
+            onclick="supprimerItem('remises','${item.id}')"
+          >
             🗑️
           </button>
 
@@ -2555,17 +3796,24 @@ window.afficherRemises = function(){
    REZILTA
 ========================================================= */
 
-window.afficherResultat = function(){
+window.afficherResultat =
+function(){
 
   const recherche =
-    document.getElementById(
-      "rechercheEleve"
-    ).value.trim().toLowerCase();
+    document
+      .getElementById(
+        "rechercheEleve"
+      )
+      .value
+      .trim()
+      .toLowerCase();
+
 
   const box =
     document.getElementById(
       "resultatEleve"
     );
+
 
   if(!recherche){
 
@@ -2578,19 +3826,28 @@ window.afficherResultat = function(){
 
   }
 
+
   const remises =
-    getData("remises");
+    getData(
+      "remises"
+    );
+
 
   const resultats =
-    remises.filter(item => {
+    remises.filter(
+      item => {
 
-      return String(
-        item.eleve || ""
-      ).toLowerCase().includes(
-        recherche
-      );
+        return String(
+          item.eleve || ""
+        )
+        .toLowerCase()
+        .includes(
+          recherche
+        );
 
-    });
+      }
+    );
+
 
   if(!resultats.length){
 
@@ -2603,22 +3860,32 @@ window.afficherResultat = function(){
 
   }
 
+
   const total =
     resultats.reduce(
       (sum,item) =>
-        sum + Number(item.note100 || 0),
+        sum +
+        Number(
+          item.note100 || 0
+        ),
       0
     );
 
+
   const moyenne =
-    total / resultats.length;
+    total /
+    resultats.length;
+
 
   const moyenne20 =
     moyenne / 5;
 
+
   box.innerHTML = `
 
-    <h3>📊 Rezilta elèv la</h3>
+    <h3>
+      📊 Rezilta elèv la
+    </h3>
 
     <div class="cards">
 
@@ -2671,21 +3938,37 @@ window.afficherResultat = function(){
 
         <tbody>
 
-          ${resultats.map(item => `
+          ${
+            resultats
+              .map(item => `
 
-            <tr>
+                <tr>
 
-              <td>${escapeHtml(item.devoir)}</td>
+                  <td>
+                    ${escapeHtml(
+                      item.devoir
+                    )}
+                  </td>
 
-              <td>${item.note100}</td>
+                  <td>
+                    ${item.note100}
+                  </td>
 
-              <td>${item.note20}</td>
+                  <td>
+                    ${item.note20}
+                  </td>
 
-              <td>${escapeHtml(item.date || "")}</td>
+                  <td>
+                    ${escapeHtml(
+                      item.date || ""
+                    )}
+                  </td>
 
-            </tr>
+                </tr>
 
-          `).join("")}
+              `)
+              .join("")
+          }
 
         </tbody>
 
@@ -2705,65 +3988,109 @@ window.afficherResultat = function(){
 function updateStatistics(){
 
   const eleves =
-    getData("eleves");
+    getData(
+      "eleves"
+    );
+
 
   const professeurs =
-    getData("professeurs");
+    getData(
+      "professeurs"
+    );
+
 
   const devoirs =
-    getData("devoirs");
+    getData(
+      "devoirs"
+    );
+
 
   const remises =
-    getData("remises");
+    getData(
+      "remises"
+    );
+
 
   const moyenne =
     remises.length
+
       ? remises.reduce(
           (sum,item) =>
-            sum + Number(item.note100 || 0),
+            sum +
+            Number(
+              item.note100 || 0
+            ),
           0
         ) / remises.length
+
       : 0;
 
-  document.getElementById(
-    "statEleves"
-  ).textContent =
+
+  document
+    .getElementById(
+      "statEleves"
+    )
+    .textContent =
     eleves.length;
 
-  document.getElementById(
-    "statProfesseurs"
-  ).textContent =
+
+  document
+    .getElementById(
+      "statProfesseurs"
+    )
+    .textContent =
     professeurs.length;
 
-  document.getElementById(
-    "statClasses"
-  ).textContent =
-    getData("classes").length;
 
-  document.getElementById(
-    "statDevoirs"
-  ).textContent =
+  document
+    .getElementById(
+      "statClasses"
+    )
+    .textContent =
+    getData(
+      "classes"
+    ).length;
+
+
+  document
+    .getElementById(
+      "statDevoirs"
+    )
+    .textContent =
     devoirs.length;
 
-  document.getElementById(
-    "totalElevesStat"
-  ).textContent =
+
+  document
+    .getElementById(
+      "totalElevesStat"
+    )
+    .textContent =
     eleves.length;
 
-  document.getElementById(
-    "totalProfStat"
-  ).textContent =
+
+  document
+    .getElementById(
+      "totalProfStat"
+    )
+    .textContent =
     professeurs.length;
 
-  document.getElementById(
-    "totalDevoirStat"
-  ).textContent =
+
+  document
+    .getElementById(
+      "totalDevoirStat"
+    )
+    .textContent =
     devoirs.length;
 
-  document.getElementById(
-    "moyenneStat"
-  ).textContent =
-    moyenne.toFixed(2) + "/100";
+
+  document
+    .getElementById(
+      "moyenneStat"
+    )
+    .textContent =
+    moyenne.toFixed(2) +
+    "/100";
 
 }
 
@@ -2772,7 +4099,8 @@ function updateStatistics(){
    SUPPRIME
 ========================================================= */
 
-window.supprimerItem = async function(
+window.supprimerItem =
+async function(
   collectionName,
   id
 ){
@@ -2787,6 +4115,7 @@ window.supprimerItem = async function(
 
   }
 
+
   try{
 
     await deleteDoc(
@@ -2797,25 +4126,37 @@ window.supprimerItem = async function(
       )
     );
 
+
     let data =
-      getData(collectionName);
+      getData(
+        collectionName
+      );
+
 
     data =
       data.filter(
         item =>
-          String(item.id) !== String(id)
+          String(item.id) !==
+          String(id)
       );
+
 
     saveLocal(
       collectionName,
       data
     );
 
+
     actualiserTout();
+
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "DELETE ERROR:",
+      error
+    );
+
 
     alert(
       "Pa kapab efase eleman sa a."
@@ -2832,31 +4173,44 @@ window.supprimerItem = async function(
 
 async function loadUsers(){
 
-  if(currentRole !== "admin"){
+  if(
+    currentRole !==
+    "admin"
+  ){
 
     return;
 
   }
+
 
   const tbody =
     document.getElementById(
       "listeUsers"
     );
 
+
   if(!tbody) return;
+
 
   try{
 
     const snapshot =
       await getDocs(
-        collection(db,"users")
+        collection(
+          db,
+          "users"
+        )
       );
+
 
     if(snapshot.empty){
 
       tbody.innerHTML =
         `<tr>
-          <td colspan="5" class="empty">
+          <td
+            colspan="5"
+            class="empty"
+          >
             Pa gen itilizatè.
           </td>
         </tr>`;
@@ -2865,16 +4219,22 @@ async function loadUsers(){
 
     }
 
+
     const users=[];
+
 
     snapshot.forEach(item => {
 
       users.push({
+
         id:item.id,
+
         ...item.data()
+
       });
 
     });
+
 
     tbody.innerHTML =
       users.map(user => `
@@ -2883,62 +4243,88 @@ async function loadUsers(){
 
           <td>
             ${escapeHtml(
-              user.name || "Itilizatè"
+              user.name ||
+              "Itilizatè"
             )}
           </td>
 
           <td>
             ${escapeHtml(
-              user.email || ""
+              user.email ||
+              ""
             )}
           </td>
 
           <td>
-            <span class="badge ${
-              user.role === "admin"
-                ? "badge-admin"
-                : "badge-user"
-            }">
+
+            <span
+              class="badge ${
+                user.role === "admin"
+                  ? "badge-admin"
+                  : "badge-user"
+              }"
+            >
+
               ${escapeHtml(
                 getRoleName(
-                  user.role || "pending"
+                  user.role ||
+                  "pending"
                 )
               )}
+
             </span>
+
           </td>
 
           <td>
-            <span class="badge ${
-              user.status === "approved" ||
-              user.role === "admin"
-                ? "badge-admin"
-                : "badge-pending"
-            }">
+
+            <span
+              class="badge ${
+                user.status === "approved" ||
+                user.role === "admin"
+                  ? "badge-admin"
+                  : "badge-pending"
+              }"
+            >
+
               ${
                 user.status === "approved" ||
                 user.role === "admin"
+
                   ? "Apwouve"
+
                   : "An atant"
               }
+
             </span>
+
           </td>
 
           <td>
 
             ${
               user.role !== "admin"
-              ? `
-                <button
-                  class="btn btn-success"
-                  onclick="approveUser('${user.id}')">
-                  ✅ Apwouve
-                </button>
-              `
-              : `
-                <span style="color:#166534">
-                  Administratè
-                </span>
-              `
+
+                ? `
+
+                  <button
+                    class="btn btn-success"
+                    onclick="approveUser('${user.id}')"
+                  >
+                    ✅ Apwouve
+                  </button>
+
+                `
+
+                : `
+
+                  <span
+                    style="color:#166534"
+                  >
+                    Administratè
+                  </span>
+
+                `
             }
 
           </td>
@@ -2947,18 +4333,25 @@ async function loadUsers(){
 
       `).join("");
 
+
   }catch(error){
 
     console.error(
-      "Users error:",
+      "USERS ERROR:",
       error
     );
 
+
     tbody.innerHTML =
       `<tr>
-        <td colspan="5" class="empty">
+
+        <td
+          colspan="5"
+          class="empty"
+        >
           Pa kapab chaje itilizatè yo.
         </td>
+
       </tr>`;
 
   }
@@ -2970,9 +4363,13 @@ async function loadUsers(){
    APWOUVE USER
 ========================================================= */
 
-window.approveUser = async function(uid){
+window.approveUser =
+async function(uid){
 
-  if(currentRole !== "admin"){
+  if(
+    currentRole !==
+    "admin"
+  ){
 
     alert(
       "Se administratè sèlman ki ka fè sa."
@@ -2981,6 +4378,7 @@ window.approveUser = async function(uid){
     return;
 
   }
+
 
   try{
 
@@ -2991,8 +4389,10 @@ window.approveUser = async function(uid){
         uid
       );
 
+
     const snap =
       await getDoc(ref);
+
 
     if(!snap.exists()){
 
@@ -3004,32 +4404,49 @@ window.approveUser = async function(uid){
 
     }
 
+
     const data =
       snap.data();
+
 
     await setDoc(
       ref,
       {
+
         ...data,
+
         role:"student",
+
         status:"approved",
-        approvedAt:new Date().toISOString(),
-        approvedBy:currentUser.uid
+
+        approvedAt:
+          new Date().toISOString(),
+
+        approvedBy:
+          currentUser.uid
+
       },
       {
         merge:true
       }
     );
 
+
     alert(
       "Itilizatè a apwouve avèk siksè."
     );
 
+
     await loadUsers();
+
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "APPROVE ERROR:",
+      error
+    );
+
 
     alert(
       "Pa kapab apwouve itilizatè a."
@@ -3046,12 +4463,29 @@ window.approveUser = async function(uid){
 
 function escapeHtml(value){
 
-  return String(value ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+  return String(
+    value ?? ""
+  )
+  .replaceAll(
+    "&",
+    "&amp;"
+  )
+  .replaceAll(
+    "<",
+    "&lt;"
+  )
+  .replaceAll(
+    ">",
+    "&gt;"
+  )
+  .replaceAll(
+    '"',
+    "&quot;"
+  )
+  .replaceAll(
+    "'",
+    "&#039;"
+  );
 
 }
 
