@@ -179,6 +179,8 @@ label{
   border-radius:8px;
   margin-bottom:15px;
   display:none;
+  white-space:pre-wrap;
+  word-break:break-word;
 }
 
 .message.error{
@@ -574,7 +576,6 @@ footer{
 <!-- APP -->
 <div id="app">
 
-  <!-- HEADER -->
   <header class="header">
 
     <div class="headerLeft">
@@ -592,7 +593,6 @@ footer{
 
   </header>
 
-  <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
 
     <button onclick="showSection('home')" class="active">
@@ -637,7 +637,6 @@ footer{
 
   </aside>
 
-  <!-- MAIN -->
   <main class="main">
 
     <!-- HOME -->
@@ -984,7 +983,6 @@ footer{
 
 </div>
 
-
 <script type="module">
 
 /* =====================================================
@@ -1003,8 +1001,7 @@ import {
   onAuthStateChanged,
   signOut,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  updateProfile
+  signInWithEmailAndPassword
 }
 from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
@@ -1021,7 +1018,7 @@ from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
 /* =====================================================
-   NOUVO FIREBASE CONFIG
+   FIREBASE CONFIG
 ===================================================== */
 
 const firebaseConfig = {
@@ -1074,7 +1071,7 @@ const collections = [
 ===================================================== */
 
 function generateId(){
-  return Date.now().toString() + "_" +
+  return Date.now().toString()+"_"+
     Math.random().toString(36).substring(2,9);
 }
 
@@ -1107,6 +1104,8 @@ function escapeHtml(value){
 function showMessage(text,type="info"){
   const box=document.getElementById("authMessage");
 
+  if(!box)return;
+
   box.textContent=text;
   box.className="message "+type;
 }
@@ -1122,7 +1121,60 @@ function showUsersMessage(text,type="info"){
 
 
 /* =====================================================
-   AUTH - EMAIL
+   RESET UI
+===================================================== */
+
+function showLoginScreen(){
+
+  document.getElementById("loading").style.display="none";
+
+  document.getElementById("app").style.display="none";
+
+  document.getElementById("loginScreen").style.display="flex";
+}
+
+function hideLoginScreen(){
+
+  document.getElementById("loginScreen").style.display="none";
+}
+
+
+/* =====================================================
+   FIREBASE ERROR
+===================================================== */
+
+function firebaseErrorMessage(error){
+
+  console.error("Firebase error:",error);
+
+  const code=error?.code || "unknown";
+
+  const message=error?.message || "Erè enkoni.";
+
+  if(code==="permission-denied" ||
+     code==="firestore/permission-denied"){
+
+    return (
+      "Firestore refize aksè.\n\n"+
+      "Kòd: "+code+"\n"+
+      "UID: "+(currentUser?.uid || "pa disponib")+"\n"+
+      "Email: "+(currentUser?.email || "pa disponib")+"\n"+
+      "Dokiman: users/"+(currentUser?.uid || "")+"\n\n"+
+      "Verifye Firestore Rules yo ak pwojè Firebase la."
+    );
+  }
+
+  return (
+    "Kòd: "+code+
+    "\nMesaj: "+message+
+    "\nUID: "+(currentUser?.uid || "pa disponib")+
+    "\nEmail: "+(currentUser?.email || "pa disponib")
+  );
+}
+
+
+/* =====================================================
+   AUTH - EMAIL LOGIN
 ===================================================== */
 
 window.loginEmail = async function(){
@@ -1145,7 +1197,10 @@ window.loginEmail = async function(){
 
   try{
 
-    showMessage("Koneksyon an ap fèt...","info");
+    showMessage(
+      "Koneksyon an ap fèt...",
+      "info"
+    );
 
     await signInWithEmailAndPassword(
       auth,
@@ -1155,28 +1210,27 @@ window.loginEmail = async function(){
 
   }catch(error){
 
-    console.error(error);
+    console.error("Email login:",error);
 
-    let message =
-      "Koneksyon an pa fèt.";
+    let message="Koneksyon an pa fèt.";
 
-    if(error.code === "auth/invalid-credential"){
+    if(error.code==="auth/invalid-credential"){
       message="Email oswa modpas la pa kòrèk.";
     }
 
-    else if(error.code === "auth/user-not-found"){
+    else if(error.code==="auth/user-not-found"){
       message="Kont sa a pa egziste.";
     }
 
-    else if(error.code === "auth/wrong-password"){
+    else if(error.code==="auth/wrong-password"){
       message="Modpas la pa kòrèk.";
     }
 
-    else if(error.code === "auth/invalid-email"){
+    else if(error.code==="auth/invalid-email"){
       message="Email la pa valid.";
     }
 
-    else if(error.code === "auth/too-many-requests"){
+    else if(error.code==="auth/too-many-requests"){
       message="Gen twòp tantativ. Eseye ankò pita.";
     }
 
@@ -1190,7 +1244,7 @@ window.loginEmail = async function(){
 
 
 /* =====================================================
-   CREYE KONT EMAIL
+   CREATE EMAIL ACCOUNT
 ===================================================== */
 
 window.registerEmail = async function(){
@@ -1211,7 +1265,7 @@ window.registerEmail = async function(){
     return;
   }
 
-  if(password.length < 6){
+  if(password.length<6){
 
     showMessage(
       "Modpas la dwe gen omwen 6 karaktè.",
@@ -1235,7 +1289,7 @@ window.registerEmail = async function(){
         password
       );
 
-    await createUserDocument(result.user);
+    await createUserDocumentIfMissing(result.user);
 
     showMessage(
       "Kont la kreye. Li pral tann apwobasyon admin.",
@@ -1244,19 +1298,19 @@ window.registerEmail = async function(){
 
   }catch(error){
 
-    console.error(error);
+    console.error("Register:",error);
 
     let message=error.message;
 
-    if(error.code === "auth/email-already-in-use"){
+    if(error.code==="auth/email-already-in-use"){
       message="Email sa a deja gen yon kont.";
     }
 
-    if(error.code === "auth/invalid-email"){
+    else if(error.code==="auth/invalid-email"){
       message="Email la pa valid.";
     }
 
-    if(error.code === "auth/weak-password"){
+    else if(error.code==="auth/weak-password"){
       message="Modpas la twò fèb. Mete omwen 6 karaktè.";
     }
 
@@ -1285,7 +1339,10 @@ window.loginGoogle = async function(){
 
   }catch(error){
 
-    console.error("Google login:",error);
+    console.error(
+      "Google popup login:",
+      error
+    );
 
     const popupErrors=[
       "auth/popup-blocked",
@@ -1296,6 +1353,11 @@ window.loginGoogle = async function(){
     if(popupErrors.includes(error.code)){
 
       try{
+
+        showMessage(
+          "Popup la pa disponib. Koneksyon Redirect la ap fèt...",
+          "info"
+        );
 
         await signInWithRedirect(
           auth,
@@ -1310,7 +1372,7 @@ window.loginGoogle = async function(){
         );
 
         showMessage(
-          redirectError.message,
+          firebaseErrorMessage(redirectError),
           "error"
         );
       }
@@ -1319,7 +1381,7 @@ window.loginGoogle = async function(){
     }
 
     showMessage(
-      error.message,
+      firebaseErrorMessage(error),
       "error"
     );
   }
@@ -1327,70 +1389,349 @@ window.loginGoogle = async function(){
 
 
 /* =====================================================
-   REDIRECT RESULT
+   GOOGLE REDIRECT RESULT
 ===================================================== */
 
 getRedirectResult(auth)
-  .then(result=>{
+.then(result=>{
 
-    if(result && result.user){
+  if(result && result.user){
 
-      console.log(
-        "Google redirect OK:",
-        result.user.email
-      );
-
-    }
-
-  })
-  .catch(error=>{
-
-    console.error(
-      "Redirect result:",
-      error
+    console.log(
+      "Google redirect OK:",
+      result.user.email
     );
 
-  });
+    console.log(
+      "Google UID:",
+      result.user.uid
+    );
+  }
+
+})
+.catch(error=>{
+
+  console.error(
+    "Redirect result:",
+    error
+  );
+
+  showMessage(
+    firebaseErrorMessage(error),
+    "error"
+  );
+});
 
 
 /* =====================================================
    USER DOCUMENT
+   IMPORTANT:
+   LI PA JANM RANPLASE DOCUMENT KI EXISTE
 ===================================================== */
 
-async function createUserDocument(user){
+async function getUserDocument(user){
+
+  if(!user || !user.uid){
+
+    throw new Error(
+      "Firebase Authentication pa bay yon UID."
+    );
+  }
 
   const ref =
-    doc(db,"users",user.uid);
+    doc(
+      db,
+      "users",
+      user.uid
+    );
 
   const snap =
     await getDoc(ref);
 
-  if(!snap.exists()){
+  return {
+    ref,
+    snap
+  };
+}
 
-    await setDoc(ref,{
 
-      uid:user.uid,
+/* =====================================================
+   CREATE ONLY IF MISSING
+===================================================== */
 
-      name:
-        user.displayName ||
-        "Itilizatè",
+async function createUserDocumentIfMissing(user){
 
-      email:
-        user.email || "",
+  const result =
+    await getUserDocument(user);
 
-      role:"pending",
+  const ref=result.ref;
+  const snap=result.snap;
 
-      status:"pending",
+  /*
+    SI DOCUMENT LA DEJA EGZISTE:
+    PA FÈ SETDOC.
+    PA MODIFYE ROLE.
+    PA MODIFYE STATUS.
+  */
 
-      createdAt:
-        new Date().toISOString()
-
-    });
+  if(snap.exists()){
 
     console.log(
-      "User document created"
+      "USER EXISTE - PA GEN MODIFICATION:",
+      user.uid,
+      snap.data()
+    );
+
+    return snap.data();
+  }
+
+  /*
+    SÈLMAN NOUVO USER:
+    KREYE PENDING.
+  */
+
+  const newData={
+
+    uid:user.uid,
+
+    name:
+      user.displayName ||
+      "Itilizatè",
+
+    email:
+      user.email || "",
+
+    role:"pending",
+
+    status:"pending",
+
+    createdAt:
+      new Date().toISOString()
+
+  };
+
+  await setDoc(
+    ref,
+    newData
+  );
+
+  console.log(
+    "Nouvo user kreye:",
+    user.uid
+  );
+
+  return newData;
+}
+
+
+/* =====================================================
+   CHECK USER ACCESS
+===================================================== */
+
+async function checkUserAccess(user){
+
+  if(!user || !user.uid){
+
+    throw new Error(
+      "Pa gen UID Firebase Authentication."
     );
   }
+
+  currentUser=user;
+
+  console.log(
+    "===================================="
+  );
+
+  console.log(
+    "AUTH USER:",
+    user.email
+  );
+
+  console.log(
+    "AUTH UID:",
+    user.uid
+  );
+
+  console.log(
+    "FIRESTORE PATH:",
+    "users/"+user.uid
+  );
+
+  console.log(
+    "===================================="
+  );
+
+
+  /*
+    PREMIYE BAGAY:
+    LI users/{UID}.
+  */
+
+  let result;
+
+  try{
+
+    result =
+      await getUserDocument(user);
+
+  }catch(error){
+
+    throw error;
+  }
+
+
+  let userData;
+
+
+  /*
+    SI DOCUMENT EXISTE:
+    NOU PRAN DONE KI DEJA LADAN.
+    PA EKRI ANYEN.
+  */
+
+  if(result.snap.exists()){
+
+    userData=result.snap.data();
+
+    console.log(
+      "USER DOCUMENT EXISTE:",
+      userData
+    );
+
+  }
+
+  /*
+    SI DOCUMENT PA EXISTE:
+    NOUVO USER -> PENDING.
+  */
+
+  else{
+
+    console.log(
+      "USER DOCUMENT PA EXISTE."
+    );
+
+    userData =
+      await createUserDocumentIfMissing(user);
+  }
+
+
+  currentUserData=userData || {};
+
+
+  /*
+    NORMALIZE ROLE + STATUS
+  */
+
+  const role=
+    String(
+      currentUserData.role || ""
+    )
+    .trim()
+    .toLowerCase();
+
+  const status=
+    String(
+      currentUserData.status || ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+  console.log(
+    "ROLE:",
+    role
+  );
+
+  console.log(
+    "STATUS:",
+    status
+  );
+
+
+  /*
+    ADMIN APPROVED
+    -> ANTRE DIRÈK
+  */
+
+  if(
+    role==="admin" &&
+    status==="approved"
+  ){
+
+    console.log(
+      "ADMIN APPROVED -> ACCESS OK"
+    );
+
+    openApp();
+
+    await loadAllData();
+
+    return true;
+  }
+
+
+  /*
+    NENPÒT USER APPROVED
+  */
+
+  if(status==="approved"){
+
+    console.log(
+      "USER APPROVED -> ACCESS OK"
+    );
+
+    openApp();
+
+    await loadAllData();
+
+    return true;
+  }
+
+
+  /*
+    PENDING
+  */
+
+  if(
+    role==="pending" ||
+    status==="pending"
+  ){
+
+    console.log(
+      "USER PENDING"
+    );
+
+    showLoginScreen();
+
+    showMessage(
+      "Kont ou an ap tann apwobasyon admin.\n\n"+
+      "UID: "+user.uid+
+      "\nEmail: "+(user.email || ""),
+      "info"
+    );
+
+    return false;
+  }
+
+
+  /*
+    OTHER STATUS
+  */
+
+  showLoginScreen();
+
+  showMessage(
+    "Kont sa a poko apwouve.\n\n"+
+    "UID: "+user.uid+
+    "\nEmail: "+(user.email || "")+
+    "\nRole: "+role+
+    "\nStatus: "+status,
+    "error"
+  );
+
+  return false;
 }
 
 
@@ -1404,10 +1745,22 @@ window.logout = async function(){
 
     await signOut(auth);
 
+    currentUser=null;
+    currentUserData=null;
+
+    showLoginScreen();
+
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "Logout:",
+      error
+    );
 
+    showMessage(
+      firebaseErrorMessage(error),
+      "error"
+    );
   }
 };
 
@@ -1421,6 +1774,10 @@ onAuthStateChanged(
   async user=>{
 
     try{
+
+      /*
+        PA GEN USER
+      */
 
       if(!user){
 
@@ -1442,108 +1799,20 @@ onAuthStateChanged(
         return;
       }
 
+
+      /*
+        GEN USER:
+        VERIFYE UID + FIRESTORE.
+      */
+
       currentUser=user;
 
-      await createUserDocument(user);
-
-      const userRef =
-        doc(db,"users",user.uid);
-
-      const userSnap =
-        await getDoc(userRef);
-
-      if(!userSnap.exists()){
-
-        await signOut(auth);
-
-        showMessage(
-          "Kont itilizatè a pa disponib.",
-          "error"
-        );
-
-        return;
-      }
-
-      currentUserData =
-        userSnap.data();
-
-      const role =
-        currentUserData.role || "pending";
-
-      const status =
-        currentUserData.status || "pending";
-
-
-      /* ADMIN */
-      if(
-        role === "admin" &&
-        status === "approved"
-      ){
-
-        openApp();
-
-        await loadAllData();
-
-        return;
-      }
-
-
-      /* PENDING */
-      if(
-        role === "pending" ||
-        status === "pending"
-      ){
-
-        document.getElementById(
-          "loading"
-        ).style.display="none";
-
-        document.getElementById(
-          "app"
-        ).style.display="none";
-
-        document.getElementById(
-          "loginScreen"
-        ).style.display="flex";
-
-        showMessage(
-          "Kont ou an ap tann apwobasyon admin.",
-          "info"
-        );
-
-        return;
-      }
-
-
-      /* OTHER APPROVED USERS */
-
-      if(status === "approved"){
-
-        openApp();
-
-        await loadAllData();
-
-        return;
-      }
-
-
-      document.getElementById(
-        "loading"
-      ).style.display="none";
-
-      document.getElementById(
-        "loginScreen"
-      ).style.display="flex";
-
-      showMessage(
-        "Kont sa a poko apwouve.",
-        "error"
-      );
+      await checkUserAccess(user);
 
     }catch(error){
 
       console.error(
-        "Auth state error:",
+        "AUTH/FIRESTORE ERROR:",
         error
       );
 
@@ -1552,11 +1821,15 @@ onAuthStateChanged(
       ).style.display="none";
 
       document.getElementById(
+        "app"
+      ).style.display="none";
+
+      document.getElementById(
         "loginScreen"
       ).style.display="flex";
 
       showMessage(
-        "Erè Firebase: "+error.message,
+        firebaseErrorMessage(error),
         "error"
       );
     }
@@ -1583,17 +1856,24 @@ function openApp(){
     "app"
   ).style.display="block";
 
+
   document.getElementById(
     "userEmail"
   ).textContent =
     currentUser?.email || "";
+
 
   document.getElementById(
     "roleText"
   ).textContent =
     roleName(currentUserData?.role);
 
-  if(currentUserData?.role !== "admin"){
+
+  if(
+    String(currentUserData?.role || "")
+      .trim()
+      .toLowerCase()!=="admin"
+  ){
 
     document.getElementById(
       "usersMenu"
@@ -1614,9 +1894,16 @@ function openApp(){
 
 function roleName(role){
 
-  if(role==="admin") return "Admin";
-  if(role==="teacher") return "Pwofesè";
-  if(role==="student") return "Elèv";
+  const value=
+    String(role || "")
+      .trim()
+      .toLowerCase();
+
+  if(value==="admin")return "Admin";
+
+  if(value==="teacher")return "Pwofesè";
+
+  if(value==="student")return "Elèv";
 
   return "Itilizatè";
 }
@@ -1630,7 +1917,7 @@ async function loadCollection(name){
 
   try{
 
-    const snap =
+    const snap=
       await getDocs(
         collection(db,name)
       );
@@ -1677,7 +1964,11 @@ async function loadAllData(){
   afficherRemises();
   actualiserStats();
 
-  if(currentUserData?.role==="admin"){
+  if(
+    String(currentUserData?.role || "")
+      .trim()
+      .toLowerCase()==="admin"
+  ){
 
     await loadUsers();
   }
@@ -1693,7 +1984,7 @@ async function saveToFirestore(
   item
 ){
 
-  const ref =
+  const ref=
     doc(
       db,
       collectionName,
@@ -1730,24 +2021,24 @@ async function deleteFromFirestore(
    ELEVES
 ===================================================== */
 
-window.ajouterEleve = async function(){
+window.ajouterEleve=async function(){
 
-  const nom =
+  const nom=
     document.getElementById(
       "eleveNom"
     ).value.trim();
 
-  const prenom =
+  const prenom=
     document.getElementById(
       "elevePrenom"
     ).value.trim();
 
-  const email =
+  const email=
     document.getElementById(
       "eleveEmail"
     ).value.trim();
 
-  const classe =
+  const classe=
     document.getElementById(
       "eleveClasse"
     ).value.trim();
@@ -1779,23 +2070,15 @@ window.ajouterEleve = async function(){
 
     data.push(item);
 
-    saveLocal("eleves",data);
+    saveLocal(
+      "eleves",
+      data
+    );
 
-    document.getElementById(
-      "eleveNom"
-    ).value="";
-
-    document.getElementById(
-      "elevePrenom"
-    ).value="";
-
-    document.getElementById(
-      "eleveEmail"
-    ).value="";
-
-    document.getElementById(
-      "eleveClasse"
-    ).value="";
+    document.getElementById("eleveNom").value="";
+    document.getElementById("elevePrenom").value="";
+    document.getElementById("eleveEmail").value="";
+    document.getElementById("eleveClasse").value="";
 
     afficherEleves();
     actualiserStats();
@@ -1877,24 +2160,24 @@ function afficherEleves(){
    PROFESSEURS
 ===================================================== */
 
-window.ajouterProfesseur = async function(){
+window.ajouterProfesseur=async function(){
 
-  const nom =
+  const nom=
     document.getElementById(
       "profNom"
     ).value.trim();
 
-  const prenom =
+  const prenom=
     document.getElementById(
       "profPrenom"
     ).value.trim();
 
-  const email =
+  const email=
     document.getElementById(
       "profEmail"
     ).value.trim();
 
-  const matiere =
+  const matiere=
     document.getElementById(
       "profMatiere"
     ).value.trim();
@@ -2016,14 +2299,14 @@ function afficherProfesseurs(){
    CLASSES
 ===================================================== */
 
-window.ajouterClasse = async function(){
+window.ajouterClasse=async function(){
 
-  const nom =
+  const nom=
     document.getElementById(
       "classeNom"
     ).value.trim();
 
-  const niveau =
+  const niveau=
     document.getElementById(
       "classeNiveau"
     ).value.trim();
@@ -2053,15 +2336,13 @@ window.ajouterClasse = async function(){
 
     data.push(item);
 
-    saveLocal("classes",data);
+    saveLocal(
+      "classes",
+      data
+    );
 
-    document.getElementById(
-      "classeNom"
-    ).value="";
-
-    document.getElementById(
-      "classeNiveau"
-    ).value="";
+    document.getElementById("classeNom").value="";
+    document.getElementById("classeNiveau").value="";
 
     afficherClasses();
     actualiserStats();
@@ -2139,14 +2420,14 @@ function afficherClasses(){
    MATIERES
 ===================================================== */
 
-window.ajouterMatiere = async function(){
+window.ajouterMatiere=async function(){
 
-  const nom =
+  const nom=
     document.getElementById(
       "matiereNom"
     ).value.trim();
 
-  const code =
+  const code=
     document.getElementById(
       "matiereCode"
     ).value.trim();
@@ -2176,15 +2457,13 @@ window.ajouterMatiere = async function(){
 
     data.push(item);
 
-    saveLocal("matieres",data);
+    saveLocal(
+      "matieres",
+      data
+    );
 
-    document.getElementById(
-      "matiereNom"
-    ).value="";
-
-    document.getElementById(
-      "matiereCode"
-    ).value="";
+    document.getElementById("matiereNom").value="";
+    document.getElementById("matiereCode").value="";
 
     afficherMatieres();
 
@@ -2261,29 +2540,29 @@ function afficherMatieres(){
    DEVOIRS
 ===================================================== */
 
-window.ajouterDevoir = async function(){
+window.ajouterDevoir=async function(){
 
-  const titre =
+  const titre=
     document.getElementById(
       "devoirTitre"
     ).value.trim();
 
-  const matiere =
+  const matiere=
     document.getElementById(
       "devoirMatiere"
     ).value.trim();
 
-  const classe =
+  const classe=
     document.getElementById(
       "devoirClasse"
     ).value.trim();
 
-  const date =
+  const date=
     document.getElementById(
       "devoirDate"
     ).value;
 
-  const description =
+  const description=
     document.getElementById(
       "devoirDescription"
     ).value.trim();
@@ -2316,27 +2595,16 @@ window.ajouterDevoir = async function(){
 
     data.push(item);
 
-    saveLocal("devoirs",data);
+    saveLocal(
+      "devoirs",
+      data
+    );
 
-    document.getElementById(
-      "devoirTitre"
-    ).value="";
-
-    document.getElementById(
-      "devoirMatiere"
-    ).value="";
-
-    document.getElementById(
-      "devoirClasse"
-    ).value="";
-
-    document.getElementById(
-      "devoirDate"
-    ).value="";
-
-    document.getElementById(
-      "devoirDescription"
-    ).value="";
+    document.getElementById("devoirTitre").value="";
+    document.getElementById("devoirMatiere").value="";
+    document.getElementById("devoirClasse").value="";
+    document.getElementById("devoirDate").value="";
+    document.getElementById("devoirDescription").value="";
 
     afficherDevoirs();
     actualiserStats();
@@ -2418,24 +2686,24 @@ function afficherDevoirs(){
    REMISES
 ===================================================== */
 
-window.ajouterRemise = async function(){
+window.ajouterRemise=async function(){
 
-  const eleve =
+  const eleve=
     document.getElementById(
       "remiseEleve"
     ).value.trim();
 
-  const devoir =
+  const devoir=
     document.getElementById(
       "remiseDevoir"
     ).value.trim();
 
-  const note =
+  const note=
     document.getElementById(
       "remiseNote"
     ).value;
 
-  const commentaire =
+  const commentaire=
     document.getElementById(
       "remiseCommentaire"
     ).value.trim();
@@ -2469,23 +2737,15 @@ window.ajouterRemise = async function(){
 
     data.push(item);
 
-    saveLocal("remises",data);
+    saveLocal(
+      "remises",
+      data
+    );
 
-    document.getElementById(
-      "remiseEleve"
-    ).value="";
-
-    document.getElementById(
-      "remiseDevoir"
-    ).value="";
-
-    document.getElementById(
-      "remiseNote"
-    ).value="";
-
-    document.getElementById(
-      "remiseCommentaire"
-    ).value="";
+    document.getElementById("remiseEleve").value="";
+    document.getElementById("remiseDevoir").value="";
+    document.getElementById("remiseNote").value="";
+    document.getElementById("remiseCommentaire").value="";
 
     afficherRemises();
     actualiserStats();
@@ -2567,14 +2827,14 @@ function afficherRemises(){
    RESULTATS
 ===================================================== */
 
-window.afficherResultatEleve = function(){
+window.afficherResultatEleve=function(){
 
-  const recherche =
+  const recherche=
     document.getElementById(
       "rechercheEleve"
     ).value.trim().toLowerCase();
 
-  const box =
+  const box=
     document.getElementById(
       "resultatEleve"
     );
@@ -2624,21 +2884,23 @@ window.afficherResultatEleve = function(){
   let total=0;
 
   travaux.forEach(r=>{
-    total += Number(r.note || 0);
+    total+=Number(r.note || 0);
   });
 
   const moyenne=
     travaux.length
-      ? (total/travaux.length)
+      ? total/travaux.length
       : 0;
 
   let html=`
     <div class="card">
+
       <h3>
         ${escapeHtml(fullName)}
       </h3>
 
-      <p>Klas:
+      <p>
+        Klas:
         ${escapeHtml(eleve.classe || "")}
       </p>
 
@@ -2656,6 +2918,7 @@ window.afficherResultatEleve = function(){
 
       <div class="tableWrap">
       <table>
+
       <thead>
       <tr>
         <th>Devwa</th>
@@ -2663,12 +2926,14 @@ window.afficherResultatEleve = function(){
         <th>Nòt /20</th>
       </tr>
       </thead>
+
       <tbody>
   `;
 
   travaux.forEach(r=>{
 
-    const note=Number(r.note || 0);
+    const note=
+      Number(r.note || 0);
 
     html+=`
       <tr>
@@ -2684,6 +2949,7 @@ window.afficherResultatEleve = function(){
       </tbody>
       </table>
       </div>
+
     </div>
   `;
 
@@ -2742,7 +3008,7 @@ function actualiserStats(){
   let total=0;
 
   remises.forEach(r=>{
-    total += Number(r.note || 0);
+    total+=Number(r.note || 0);
   });
 
   const moyenne=
@@ -2761,7 +3027,7 @@ function actualiserStats(){
    DELETE
 ===================================================== */
 
-window.supprimerItem = async function(
+window.supprimerItem=async function(
   collectionName,
   id
 ){
@@ -2833,7 +3099,7 @@ window.supprimerItem = async function(
    NAVIGATION
 ===================================================== */
 
-window.showSection = function(id){
+window.showSection=function(id){
 
   document
     .querySelectorAll(".section")
@@ -2934,7 +3200,9 @@ window.setLanguage=function(lang){
 async function loadUsers(){
 
   if(
-    currentUserData?.role!=="admin"
+    String(currentUserData?.role || "")
+      .trim()
+      .toLowerCase()!=="admin"
   ){
     return;
   }
@@ -2985,10 +3253,15 @@ async function loadUsers(){
 
       const data=item.data();
 
-      const role=data.role || "pending";
+      const role=
+        String(data.role || "pending")
+          .trim()
+          .toLowerCase();
 
       const status=
-        data.status || "pending";
+        String(data.status || "pending")
+          .trim()
+          .toLowerCase();
 
       let badge="badgePending";
 
@@ -3021,7 +3294,9 @@ async function loadUsers(){
 
           <td>
             <span class="badge ${badge}">
-              ${escapeHtml(roleName(role))}
+              ${escapeHtml(
+                roleName(role)
+              )}
             </span>
           </td>
 
@@ -3048,8 +3323,8 @@ async function loadUsers(){
       }
 
       if(
-        item.id !== currentUser.uid &&
-        role !== "admin"
+        item.id!==currentUser.uid &&
+        role!=="admin"
       ){
 
         html+=`
@@ -3085,11 +3360,15 @@ async function loadUsers(){
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "loadUsers:",
+      error
+    );
 
     box.innerHTML=`
       <div class="card">
-        Erè pandan chajman itilizatè yo:
+        <strong>Erè pandan chajman itilizatè yo.</strong>
+        <br><br>
         ${escapeHtml(error.message)}
       </div>
     `;
@@ -3104,7 +3383,9 @@ async function loadUsers(){
 window.approveUser=async function(uid){
 
   if(
-    currentUserData?.role!=="admin"
+    String(currentUserData?.role || "")
+      .trim()
+      .toLowerCase()!=="admin"
   ){
 
     alert(
@@ -3153,7 +3434,9 @@ window.approveUser=async function(uid){
 window.makeTeacher=async function(uid){
 
   if(
-    currentUserData?.role!=="admin"
+    String(currentUserData?.role || "")
+      .trim()
+      .toLowerCase()!=="admin"
   ){
 
     alert(
@@ -3203,7 +3486,9 @@ window.deleteUserDocument=
 async function(uid){
 
   if(
-    currentUserData?.role!=="admin"
+    String(currentUserData?.role || "")
+      .trim()
+      .toLowerCase()!=="admin"
   ){
 
     alert(
