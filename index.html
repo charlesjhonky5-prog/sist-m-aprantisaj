@@ -586,6 +586,7 @@ footer{
     <div class="userInfo">
       <span id="roleText"></span>
       <span class="userEmail" id="userEmail"></span>
+
       <button class="logoutBtn" onclick="logout()">
         Déconnexion
       </button>
@@ -631,7 +632,10 @@ footer{
       📈 Estatistik
     </button>
 
-    <button id="usersMenu" onclick="showSection('users')">
+    <!-- ADMIN/DISABLED POU KOUNYE A -->
+    <button id="usersMenu"
+            onclick="showSection('users')"
+            style="display:none;">
       👥 Itilizatè
     </button>
 
@@ -886,8 +890,11 @@ footer{
         <input id="remiseDevoir" placeholder="Non devwa">
 
         <label>Nòt</label>
-        <input id="remiseNote" type="number" min="0" max="100"
-          placeholder="0 - 100">
+        <input id="remiseNote"
+               type="number"
+               min="0"
+               max="100"
+               placeholder="0 - 100">
 
         <label>Remak</label>
         <textarea id="remiseCommentaire"
@@ -961,17 +968,20 @@ footer{
 
     </section>
 
-    <!-- USERS -->
+    <!-- USERS / ADMIN
+         KACHE POU KOUNYE A -->
     <section id="users" class="section">
 
       <div class="sectionTitle">
         <h2>👥 Itilizatè</h2>
-        <p>Administre itilizatè sistèm nan.</p>
+        <p>Pati sa a ap retounen lè n ap mete Admin lan.</p>
       </div>
 
-      <div id="usersMessage" class="message"></div>
-
-      <div id="usersList"></div>
+      <div class="card">
+        <p>
+          Modil Admin lan dezaktive pou kounye a.
+        </p>
+      </div>
 
     </section>
 
@@ -1009,7 +1019,6 @@ import {
   getFirestore,
   collection,
   getDocs,
-  getDoc,
   doc,
   setDoc,
   deleteDoc
@@ -1054,7 +1063,6 @@ googleProvider.setCustomParameters({
 ===================================================== */
 
 let currentUser = null;
-let currentUserData = null;
 
 const collections = [
   "eleves",
@@ -1071,28 +1079,38 @@ const collections = [
 ===================================================== */
 
 function generateId(){
+
   return Date.now().toString()+"_"+
     Math.random().toString(36).substring(2,9);
 }
 
+
 function saveLocal(key,data){
+
   localStorage.setItem(
     key,
     JSON.stringify(data)
   );
 }
 
+
 function getLocal(key){
+
   try{
+
     return JSON.parse(
       localStorage.getItem(key) || "[]"
     );
+
   }catch(e){
+
     return [];
   }
 }
 
+
 function escapeHtml(value){
+
   return String(value ?? "")
     .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
@@ -1101,41 +1119,41 @@ function escapeHtml(value){
     .replace(/'/g,"&#039;");
 }
 
+
 function showMessage(text,type="info"){
-  const box=document.getElementById("authMessage");
+
+  const box=
+    document.getElementById("authMessage");
 
   if(!box)return;
 
   box.textContent=text;
+
   box.className="message "+type;
 }
 
-function showUsersMessage(text,type="info"){
-  const box=document.getElementById("usersMessage");
-
-  if(!box)return;
-
-  box.textContent=text;
-  box.className="message "+type;
-}
-
-
-/* =====================================================
-   RESET UI
-===================================================== */
 
 function showLoginScreen(){
 
-  document.getElementById("loading").style.display="none";
+  document.getElementById(
+    "loading"
+  ).style.display="none";
 
-  document.getElementById("app").style.display="none";
+  document.getElementById(
+    "app"
+  ).style.display="none";
 
-  document.getElementById("loginScreen").style.display="flex";
+  document.getElementById(
+    "loginScreen"
+  ).style.display="flex";
 }
+
 
 function hideLoginScreen(){
 
-  document.getElementById("loginScreen").style.display="none";
+  document.getElementById(
+    "loginScreen"
+  ).style.display="none";
 }
 
 
@@ -1145,24 +1163,17 @@ function hideLoginScreen(){
 
 function firebaseErrorMessage(error){
 
-  console.error("Firebase error:",error);
+  console.error(
+    "Firebase error:",
+    error
+  );
 
-  const code=error?.code || "unknown";
+  const code=
+    error?.code || "unknown";
 
-  const message=error?.message || "Erè enkoni.";
-
-  if(code==="permission-denied" ||
-     code==="firestore/permission-denied"){
-
-    return (
-      "Firestore refize aksè.\n\n"+
-      "Kòd: "+code+"\n"+
-      "UID: "+(currentUser?.uid || "pa disponib")+"\n"+
-      "Email: "+(currentUser?.email || "pa disponib")+"\n"+
-      "Dokiman: users/"+(currentUser?.uid || "")+"\n\n"+
-      "Verifye Firestore Rules yo ak pwojè Firebase la."
-    );
-  }
+  const message=
+    error?.message ||
+    "Erè enkoni.";
 
   return (
     "Kòd: "+code+
@@ -1174,16 +1185,21 @@ function firebaseErrorMessage(error){
 
 
 /* =====================================================
-   AUTH - EMAIL LOGIN
+   EMAIL LOGIN
+   PA GEN ADMIN CHECK
 ===================================================== */
 
 window.loginEmail = async function(){
 
-  const email =
-    document.getElementById("email").value.trim();
+  const email=
+    document.getElementById(
+      "email"
+    ).value.trim();
 
-  const password =
-    document.getElementById("password").value;
+  const password=
+    document.getElementById(
+      "password"
+    ).value;
 
   if(!email || !password){
 
@@ -1210,50 +1226,84 @@ window.loginEmail = async function(){
 
   }catch(error){
 
-    console.error("Email login:",error);
+    console.error(
+      "Email login:",
+      error
+    );
 
-    let message="Koneksyon an pa fèt.";
+    let message=
+      "Koneksyon an pa fèt.";
 
-    if(error.code==="auth/invalid-credential"){
-      message="Email oswa modpas la pa kòrèk.";
+    if(
+      error.code==="auth/invalid-credential"
+    ){
+
+      message=
+        "Email oswa modpas la pa kòrèk.";
     }
 
-    else if(error.code==="auth/user-not-found"){
-      message="Kont sa a pa egziste.";
+    else if(
+      error.code==="auth/user-not-found"
+    ){
+
+      message=
+        "Kont sa a pa egziste.";
     }
 
-    else if(error.code==="auth/wrong-password"){
-      message="Modpas la pa kòrèk.";
+    else if(
+      error.code==="auth/wrong-password"
+    ){
+
+      message=
+        "Modpas la pa kòrèk.";
     }
 
-    else if(error.code==="auth/invalid-email"){
-      message="Email la pa valid.";
+    else if(
+      error.code==="auth/invalid-email"
+    ){
+
+      message=
+        "Email la pa valid.";
     }
 
-    else if(error.code==="auth/too-many-requests"){
-      message="Gen twòp tantativ. Eseye ankò pita.";
+    else if(
+      error.code==="auth/too-many-requests"
+    ){
+
+      message=
+        "Gen twòp tantativ. Eseye ankò pita.";
     }
 
     else{
-      message=error.message;
+
+      message=
+        error.message;
     }
 
-    showMessage(message,"error");
+    showMessage(
+      message,
+      "error"
+    );
   }
 };
 
 
 /* =====================================================
    CREATE EMAIL ACCOUNT
+   PA GEN ADMIN / PENDING
 ===================================================== */
 
 window.registerEmail = async function(){
 
-  const email =
-    document.getElementById("email").value.trim();
+  const email=
+    document.getElementById(
+      "email"
+    ).value.trim();
 
-  const password =
-    document.getElementById("password").value;
+  const password=
+    document.getElementById(
+      "password"
+    ).value;
 
   if(!email || !password){
 
@@ -1282,45 +1332,70 @@ window.registerEmail = async function(){
       "info"
     );
 
-    const result =
-      await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+    await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
 
-    await createUserDocumentIfMissing(result.user);
+    /*
+      PA KREYE users/{UID}.
+      PA GEN ROLE.
+      PA GEN STATUS.
+      Kont lan antre dirèkteman.
+    */
 
     showMessage(
-      "Kont la kreye. Li pral tann apwobasyon admin.",
+      "Kont la kreye. Ou ka antre nan sistèm nan.",
       "success"
     );
 
   }catch(error){
 
-    console.error("Register:",error);
+    console.error(
+      "Register:",
+      error
+    );
 
-    let message=error.message;
+    let message=
+      error.message;
 
-    if(error.code==="auth/email-already-in-use"){
-      message="Email sa a deja gen yon kont.";
+    if(
+      error.code==="auth/email-already-in-use"
+    ){
+
+      message=
+        "Email sa a deja gen yon kont.";
     }
 
-    else if(error.code==="auth/invalid-email"){
-      message="Email la pa valid.";
+    else if(
+      error.code==="auth/invalid-email"
+    ){
+
+      message=
+        "Email la pa valid.";
     }
 
-    else if(error.code==="auth/weak-password"){
-      message="Modpas la twò fèb. Mete omwen 6 karaktè.";
+    else if(
+      error.code==="auth/weak-password"
+    ){
+
+      message=
+        "Modpas la twò fèb. Mete omwen 6 karaktè.";
     }
 
-    showMessage(message,"error");
+    showMessage(
+      message,
+      "error"
+    );
   }
 };
 
 
 /* =====================================================
    GOOGLE LOGIN
+   MOBILE = REDIRECT
+   DESKTOP = POPUP
 ===================================================== */
 
 window.loginGoogle = async function(){
@@ -1332,6 +1407,31 @@ window.loginGoogle = async function(){
       "info"
     );
 
+    const isMobile =
+      /Android|iPhone|iPad|iPod/i.test(
+        navigator.userAgent
+      );
+
+    /*
+      Sou telefòn:
+      Redirect pi estab pase Popup.
+    */
+
+    if(isMobile){
+
+      await signInWithRedirect(
+        auth,
+        googleProvider
+      );
+
+      return;
+    }
+
+    /*
+      Sou òdinatè:
+      Eseye Popup.
+    */
+
     await signInWithPopup(
       auth,
       googleProvider
@@ -1340,22 +1440,27 @@ window.loginGoogle = async function(){
   }catch(error){
 
     console.error(
-      "Google popup login:",
+      "Google login:",
       error
     );
 
-    const popupErrors=[
+    const redirectErrors=[
       "auth/popup-blocked",
       "auth/popup-closed-by-user",
-      "auth/cancelled-popup-request"
+      "auth/cancelled-popup-request",
+      "auth/operation-not-supported-in-this-environment"
     ];
 
-    if(popupErrors.includes(error.code)){
+    if(
+      redirectErrors.includes(
+        error.code
+      )
+    ){
 
       try{
 
         showMessage(
-          "Popup la pa disponib. Koneksyon Redirect la ap fèt...",
+          "Popup la pa disponib. Redirect Google la ap fèt...",
           "info"
         );
 
@@ -1364,20 +1469,24 @@ window.loginGoogle = async function(){
           googleProvider
         );
 
+        return;
+
       }catch(redirectError){
 
         console.error(
-          "Redirect error:",
+          "Google Redirect:",
           redirectError
         );
 
         showMessage(
-          firebaseErrorMessage(redirectError),
+          firebaseErrorMessage(
+            redirectError
+          ),
           "error"
         );
-      }
 
-      return;
+        return;
+      }
     }
 
     showMessage(
@@ -1395,7 +1504,10 @@ window.loginGoogle = async function(){
 getRedirectResult(auth)
 .then(result=>{
 
-  if(result && result.user){
+  if(
+    result &&
+    result.user
+  ){
 
     console.log(
       "Google redirect OK:",
@@ -1416,323 +1528,22 @@ getRedirectResult(auth)
     error
   );
 
-  showMessage(
-    firebaseErrorMessage(error),
-    "error"
-  );
-});
-
-
-/* =====================================================
-   USER DOCUMENT
-   IMPORTANT:
-   LI PA JANM RANPLASE DOCUMENT KI EXISTE
-===================================================== */
-
-async function getUserDocument(user){
-
-  if(!user || !user.uid){
-
-    throw new Error(
-      "Firebase Authentication pa bay yon UID."
-    );
-  }
-
-  const ref =
-    doc(
-      db,
-      "users",
-      user.uid
-    );
-
-  const snap =
-    await getDoc(ref);
-
-  return {
-    ref,
-    snap
-  };
-}
-
-
-/* =====================================================
-   CREATE ONLY IF MISSING
-===================================================== */
-
-async function createUserDocumentIfMissing(user){
-
-  const result =
-    await getUserDocument(user);
-
-  const ref=result.ref;
-  const snap=result.snap;
-
   /*
-    SI DOCUMENT LA DEJA EGZISTE:
-    PA FÈ SETDOC.
-    PA MODIFYE ROLE.
-    PA MODIFYE STATUS.
-  */
-
-  if(snap.exists()){
-
-    console.log(
-      "USER EXISTE - PA GEN MODIFICATION:",
-      user.uid,
-      snap.data()
-    );
-
-    return snap.data();
-  }
-
-  /*
-    SÈLMAN NOUVO USER:
-    KREYE PENDING.
-  */
-
-  const newData={
-
-    uid:user.uid,
-
-    name:
-      user.displayName ||
-      "Itilizatè",
-
-    email:
-      user.email || "",
-
-    role:"pending",
-
-    status:"pending",
-
-    createdAt:
-      new Date().toISOString()
-
-  };
-
-  await setDoc(
-    ref,
-    newData
-  );
-
-  console.log(
-    "Nouvo user kreye:",
-    user.uid
-  );
-
-  return newData;
-}
-
-
-/* =====================================================
-   CHECK USER ACCESS
-===================================================== */
-
-async function checkUserAccess(user){
-
-  if(!user || !user.uid){
-
-    throw new Error(
-      "Pa gen UID Firebase Authentication."
-    );
-  }
-
-  currentUser=user;
-
-  console.log(
-    "===================================="
-  );
-
-  console.log(
-    "AUTH USER:",
-    user.email
-  );
-
-  console.log(
-    "AUTH UID:",
-    user.uid
-  );
-
-  console.log(
-    "FIRESTORE PATH:",
-    "users/"+user.uid
-  );
-
-  console.log(
-    "===================================="
-  );
-
-
-  /*
-    PREMIYE BAGAY:
-    LI users/{UID}.
-  */
-
-  let result;
-
-  try{
-
-    result =
-      await getUserDocument(user);
-
-  }catch(error){
-
-    throw error;
-  }
-
-
-  let userData;
-
-
-  /*
-    SI DOCUMENT EXISTE:
-    NOU PRAN DONE KI DEJA LADAN.
-    PA EKRI ANYEN.
-  */
-
-  if(result.snap.exists()){
-
-    userData=result.snap.data();
-
-    console.log(
-      "USER DOCUMENT EXISTE:",
-      userData
-    );
-
-  }
-
-  /*
-    SI DOCUMENT PA EXISTE:
-    NOUVO USER -> PENDING.
-  */
-
-  else{
-
-    console.log(
-      "USER DOCUMENT PA EXISTE."
-    );
-
-    userData =
-      await createUserDocumentIfMissing(user);
-  }
-
-
-  currentUserData=userData || {};
-
-
-  /*
-    NORMALIZE ROLE + STATUS
-  */
-
-  const role=
-    String(
-      currentUserData.role || ""
-    )
-    .trim()
-    .toLowerCase();
-
-  const status=
-    String(
-      currentUserData.status || ""
-    )
-    .trim()
-    .toLowerCase();
-
-
-  console.log(
-    "ROLE:",
-    role
-  );
-
-  console.log(
-    "STATUS:",
-    status
-  );
-
-
-  /*
-    ADMIN APPROVED
-    -> ANTRE DIRÈK
+    Pa bloke aplikasyon an si redirect
+    pa retounen yon rezilta.
   */
 
   if(
-    role==="admin" &&
-    status==="approved"
+    error &&
+    error.code
   ){
-
-    console.log(
-      "ADMIN APPROVED -> ACCESS OK"
-    );
-
-    openApp();
-
-    await loadAllData();
-
-    return true;
-  }
-
-
-  /*
-    NENPÒT USER APPROVED
-  */
-
-  if(status==="approved"){
-
-    console.log(
-      "USER APPROVED -> ACCESS OK"
-    );
-
-    openApp();
-
-    await loadAllData();
-
-    return true;
-  }
-
-
-  /*
-    PENDING
-  */
-
-  if(
-    role==="pending" ||
-    status==="pending"
-  ){
-
-    console.log(
-      "USER PENDING"
-    );
-
-    showLoginScreen();
 
     showMessage(
-      "Kont ou an ap tann apwobasyon admin.\n\n"+
-      "UID: "+user.uid+
-      "\nEmail: "+(user.email || ""),
-      "info"
+      firebaseErrorMessage(error),
+      "error"
     );
-
-    return false;
   }
-
-
-  /*
-    OTHER STATUS
-  */
-
-  showLoginScreen();
-
-  showMessage(
-    "Kont sa a poko apwouve.\n\n"+
-    "UID: "+user.uid+
-    "\nEmail: "+(user.email || "")+
-    "\nRole: "+role+
-    "\nStatus: "+status,
-    "error"
-  );
-
-  return false;
-}
+});
 
 
 /* =====================================================
@@ -1746,7 +1557,6 @@ window.logout = async function(){
     await signOut(auth);
 
     currentUser=null;
-    currentUserData=null;
 
     showLoginScreen();
 
@@ -1767,6 +1577,7 @@ window.logout = async function(){
 
 /* =====================================================
    AUTH STATE
+   ANY AUTHENTICATED USER = ACCESS
 ===================================================== */
 
 onAuthStateChanged(
@@ -1777,12 +1588,12 @@ onAuthStateChanged(
 
       /*
         PA GEN USER
+        -> MONTRE LOGIN
       */
 
       if(!user){
 
         currentUser=null;
-        currentUserData=null;
 
         document.getElementById(
           "loading"
@@ -1801,18 +1612,62 @@ onAuthStateChanged(
 
 
       /*
-        GEN USER:
-        VERIFYE UID + FIRESTORE.
+        GEN USER
+        -> ANTRE DIRÈK.
+        
+        PA VERIFY:
+        role
+        status
+        users/{UID}
+        admin
+        pending
+        approved
       */
 
       currentUser=user;
 
-      await checkUserAccess(user);
+      console.log(
+        "================================"
+      );
+
+      console.log(
+        "GOOGLE/EMAIL LOGIN OK"
+      );
+
+      console.log(
+        "Email:",
+        user.email
+      );
+
+      console.log(
+        "UID:",
+        user.uid
+      );
+
+      console.log(
+        "================================"
+      );
+
+
+      /*
+        OUVRI APP LA IMEDYATMAN.
+      */
+
+      openApp();
+
+
+      /*
+        Chaje done yo apre app la parèt.
+        Menm si Firestore refize yo,
+        loadCollection() ap sèvi ak localStorage.
+      */
+
+      await loadAllData();
 
     }catch(error){
 
       console.error(
-        "AUTH/FIRESTORE ERROR:",
+        "AUTH ERROR:",
         error
       );
 
@@ -1840,6 +1695,7 @@ onAuthStateChanged(
 
 /* =====================================================
    OPEN APP
+   PA GEN ROLE / ADMIN CHECK
 ===================================================== */
 
 function openApp(){
@@ -1859,53 +1715,23 @@ function openApp(){
 
   document.getElementById(
     "userEmail"
-  ).textContent =
+  ).textContent=
     currentUser?.email || "";
 
 
   document.getElementById(
     "roleText"
-  ).textContent =
-    roleName(currentUserData?.role);
+  ).textContent=
+    "Itilizatè";
 
 
-  if(
-    String(currentUserData?.role || "")
-      .trim()
-      .toLowerCase()!=="admin"
-  ){
+  /*
+    ADMIN USERS MENU KACHE POU KOUNYE A.
+  */
 
-    document.getElementById(
-      "usersMenu"
-    ).style.display="none";
-
-  }else{
-
-    document.getElementById(
-      "usersMenu"
-    ).style.display="block";
-  }
-}
-
-
-/* =====================================================
-   ROLE NAME
-===================================================== */
-
-function roleName(role){
-
-  const value=
-    String(role || "")
-      .trim()
-      .toLowerCase();
-
-  if(value==="admin")return "Admin";
-
-  if(value==="teacher")return "Pwofesè";
-
-  if(value==="student")return "Elèv";
-
-  return "Itilizatè";
+  document.getElementById(
+    "usersMenu"
+  ).style.display="none";
 }
 
 
@@ -1933,7 +1759,10 @@ async function loadCollection(name){
 
     });
 
-    saveLocal(name,data);
+    saveLocal(
+      name,
+      data
+    );
 
     return data;
 
@@ -1944,6 +1773,11 @@ async function loadCollection(name){
       error
     );
 
+    /*
+      Si Firestore Rules yo bloke aksè,
+      aplikasyon an kontinye ak localStorage.
+    */
+
     return getLocal(name);
   }
 }
@@ -1951,27 +1785,31 @@ async function loadCollection(name){
 
 async function loadAllData(){
 
-  for(const name of collections){
+  /*
+    Chaje sèlman koleksyon nòmal yo.
+    Pa gen users/admin.
+  */
+
+  for(
+    const name of collections
+  ){
 
     await loadCollection(name);
   }
 
   afficherEleves();
+
   afficherProfesseurs();
+
   afficherClasses();
+
   afficherMatieres();
+
   afficherDevoirs();
+
   afficherRemises();
+
   actualiserStats();
-
-  if(
-    String(currentUserData?.role || "")
-      .trim()
-      .toLowerCase()==="admin"
-  ){
-
-    await loadUsers();
-  }
 }
 
 
@@ -2045,7 +1883,9 @@ window.ajouterEleve=async function(){
 
   if(!nom){
 
-    alert("Mete non elèv la.");
+    alert(
+      "Mete non elèv la."
+    );
 
     return;
   }
@@ -2056,7 +1896,8 @@ window.ajouterEleve=async function(){
     prenom,
     email,
     classe,
-    createdAt:new Date().toISOString()
+    createdAt:
+      new Date().toISOString()
   };
 
   try{
@@ -2066,7 +1907,8 @@ window.ajouterEleve=async function(){
       item
     );
 
-    const data=getLocal("eleves");
+    const data=
+      getLocal("eleves");
 
     data.push(item);
 
@@ -2075,15 +1917,29 @@ window.ajouterEleve=async function(){
       data
     );
 
-    document.getElementById("eleveNom").value="";
-    document.getElementById("elevePrenom").value="";
-    document.getElementById("eleveEmail").value="";
-    document.getElementById("eleveClasse").value="";
+    document.getElementById(
+      "eleveNom"
+    ).value="";
+
+    document.getElementById(
+      "elevePrenom"
+    ).value="";
+
+    document.getElementById(
+      "eleveEmail"
+    ).value="";
+
+    document.getElementById(
+      "eleveClasse"
+    ).value="";
 
     afficherEleves();
+
     actualiserStats();
 
-    alert("Elèv la ajoute.");
+    alert(
+      "Elèv la ajoute."
+    );
 
   }catch(error){
 
@@ -2096,7 +1952,8 @@ window.ajouterEleve=async function(){
 
 function afficherEleves(){
 
-  const data=getLocal("eleves");
+  const data=
+    getLocal("eleves");
 
   const box=
     document.getElementById(
@@ -2184,7 +2041,9 @@ window.ajouterProfesseur=async function(){
 
   if(!nom){
 
-    alert("Mete non pwofesè a.");
+    alert(
+      "Mete non pwofesè a."
+    );
 
     return;
   }
@@ -2195,7 +2054,8 @@ window.ajouterProfesseur=async function(){
     prenom,
     email,
     matiere,
-    createdAt:new Date().toISOString()
+    createdAt:
+      new Date().toISOString()
   };
 
   try{
@@ -2205,7 +2065,8 @@ window.ajouterProfesseur=async function(){
       item
     );
 
-    const data=getLocal("professeurs");
+    const data=
+      getLocal("professeurs");
 
     data.push(item);
 
@@ -2214,15 +2075,29 @@ window.ajouterProfesseur=async function(){
       data
     );
 
-    document.getElementById("profNom").value="";
-    document.getElementById("profPrenom").value="";
-    document.getElementById("profEmail").value="";
-    document.getElementById("profMatiere").value="";
+    document.getElementById(
+      "profNom"
+    ).value="";
+
+    document.getElementById(
+      "profPrenom"
+    ).value="";
+
+    document.getElementById(
+      "profEmail"
+    ).value="";
+
+    document.getElementById(
+      "profMatiere"
+    ).value="";
 
     afficherProfesseurs();
+
     actualiserStats();
 
-    alert("Pwofesè a ajoute.");
+    alert(
+      "Pwofesè a ajoute."
+    );
 
   }catch(error){
 
@@ -2235,7 +2110,8 @@ window.ajouterProfesseur=async function(){
 
 function afficherProfesseurs(){
 
-  const data=getLocal("professeurs");
+  const data=
+    getLocal("professeurs");
 
   const box=
     document.getElementById(
@@ -2313,7 +2189,9 @@ window.ajouterClasse=async function(){
 
   if(!nom){
 
-    alert("Mete non klas la.");
+    alert(
+      "Mete non klas la."
+    );
 
     return;
   }
@@ -2322,7 +2200,8 @@ window.ajouterClasse=async function(){
     id:generateId(),
     nom,
     niveau,
-    createdAt:new Date().toISOString()
+    createdAt:
+      new Date().toISOString()
   };
 
   try{
@@ -2332,7 +2211,8 @@ window.ajouterClasse=async function(){
       item
     );
 
-    const data=getLocal("classes");
+    const data=
+      getLocal("classes");
 
     data.push(item);
 
@@ -2341,13 +2221,21 @@ window.ajouterClasse=async function(){
       data
     );
 
-    document.getElementById("classeNom").value="";
-    document.getElementById("classeNiveau").value="";
+    document.getElementById(
+      "classeNom"
+    ).value="";
+
+    document.getElementById(
+      "classeNiveau"
+    ).value="";
 
     afficherClasses();
+
     actualiserStats();
 
-    alert("Klas la ajoute.");
+    alert(
+      "Klas la ajoute."
+    );
 
   }catch(error){
 
@@ -2360,7 +2248,8 @@ window.ajouterClasse=async function(){
 
 function afficherClasses(){
 
-  const data=getLocal("classes");
+  const data=
+    getLocal("classes");
 
   const box=
     document.getElementById(
@@ -2434,7 +2323,9 @@ window.ajouterMatiere=async function(){
 
   if(!nom){
 
-    alert("Mete non matyè a.");
+    alert(
+      "Mete non matyè a."
+    );
 
     return;
   }
@@ -2443,7 +2334,8 @@ window.ajouterMatiere=async function(){
     id:generateId(),
     nom,
     code,
-    createdAt:new Date().toISOString()
+    createdAt:
+      new Date().toISOString()
   };
 
   try{
@@ -2453,7 +2345,8 @@ window.ajouterMatiere=async function(){
       item
     );
 
-    const data=getLocal("matieres");
+    const data=
+      getLocal("matieres");
 
     data.push(item);
 
@@ -2462,12 +2355,19 @@ window.ajouterMatiere=async function(){
       data
     );
 
-    document.getElementById("matiereNom").value="";
-    document.getElementById("matiereCode").value="";
+    document.getElementById(
+      "matiereNom"
+    ).value="";
+
+    document.getElementById(
+      "matiereCode"
+    ).value="";
 
     afficherMatieres();
 
-    alert("Matyè a ajoute.");
+    alert(
+      "Matyè a ajoute."
+    );
 
   }catch(error){
 
@@ -2480,7 +2380,8 @@ window.ajouterMatiere=async function(){
 
 function afficherMatieres(){
 
-  const data=getLocal("matieres");
+  const data=
+    getLocal("matieres");
 
   const box=
     document.getElementById(
@@ -2569,7 +2470,9 @@ window.ajouterDevoir=async function(){
 
   if(!titre){
 
-    alert("Mete tit devwa a.");
+    alert(
+      "Mete tit devwa a."
+    );
 
     return;
   }
@@ -2581,7 +2484,8 @@ window.ajouterDevoir=async function(){
     classe,
     date,
     description,
-    createdAt:new Date().toISOString()
+    createdAt:
+      new Date().toISOString()
   };
 
   try{
@@ -2591,7 +2495,8 @@ window.ajouterDevoir=async function(){
       item
     );
 
-    const data=getLocal("devoirs");
+    const data=
+      getLocal("devoirs");
 
     data.push(item);
 
@@ -2600,16 +2505,33 @@ window.ajouterDevoir=async function(){
       data
     );
 
-    document.getElementById("devoirTitre").value="";
-    document.getElementById("devoirMatiere").value="";
-    document.getElementById("devoirClasse").value="";
-    document.getElementById("devoirDate").value="";
-    document.getElementById("devoirDescription").value="";
+    document.getElementById(
+      "devoirTitre"
+    ).value="";
+
+    document.getElementById(
+      "devoirMatiere"
+    ).value="";
+
+    document.getElementById(
+      "devoirClasse"
+    ).value="";
+
+    document.getElementById(
+      "devoirDate"
+    ).value="";
+
+    document.getElementById(
+      "devoirDescription"
+    ).value="";
 
     afficherDevoirs();
+
     actualiserStats();
 
-    alert("Devwa a ajoute.");
+    alert(
+      "Devwa a ajoute."
+    );
 
   }catch(error){
 
@@ -2622,7 +2544,8 @@ window.ajouterDevoir=async function(){
 
 function afficherDevoirs(){
 
-  const data=getLocal("devoirs");
+  const data=
+    getLocal("devoirs");
 
   const box=
     document.getElementById(
@@ -2723,7 +2646,8 @@ window.ajouterRemise=async function(){
     devoir,
     note:Number(note || 0),
     commentaire,
-    createdAt:new Date().toISOString()
+    createdAt:
+      new Date().toISOString()
   };
 
   try{
@@ -2733,7 +2657,8 @@ window.ajouterRemise=async function(){
       item
     );
 
-    const data=getLocal("remises");
+    const data=
+      getLocal("remises");
 
     data.push(item);
 
@@ -2742,15 +2667,29 @@ window.ajouterRemise=async function(){
       data
     );
 
-    document.getElementById("remiseEleve").value="";
-    document.getElementById("remiseDevoir").value="";
-    document.getElementById("remiseNote").value="";
-    document.getElementById("remiseCommentaire").value="";
+    document.getElementById(
+      "remiseEleve"
+    ).value="";
+
+    document.getElementById(
+      "remiseDevoir"
+    ).value="";
+
+    document.getElementById(
+      "remiseNote"
+    ).value="";
+
+    document.getElementById(
+      "remiseCommentaire"
+    ).value="";
 
     afficherRemises();
+
     actualiserStats();
 
-    alert("Remise la anrejistre.");
+    alert(
+      "Remise la anrejistre."
+    );
 
   }catch(error){
 
@@ -2763,7 +2702,8 @@ window.ajouterRemise=async function(){
 
 function afficherRemises(){
 
-  const data=getLocal("remises");
+  const data=
+    getLocal("remises");
 
   const box=
     document.getElementById(
@@ -2842,19 +2782,26 @@ window.afficherResultatEleve=function(){
   if(!recherche){
 
     box.innerHTML="";
+
     return;
   }
 
-  const eleves=getLocal("eleves");
+  const eleves=
+    getLocal("eleves");
 
-  const remises=getLocal("remises");
+  const remises=
+    getLocal("remises");
 
-  const eleve=eleves.find(e=>
-    (
-      (e.nom || "")+" "+
-      (e.prenom || "")
-    ).toLowerCase().includes(recherche)
-  );
+  const eleve=
+    eleves.find(e=>
+      (
+        (e.nom || "")+
+        " "+
+        (e.prenom || "")
+      )
+      .toLowerCase()
+      .includes(recherche)
+    );
 
   if(!eleve){
 
@@ -2869,22 +2816,28 @@ window.afficherResultatEleve=function(){
 
   const fullName=
     (
-      (eleve.nom || "")+" "+
+      (eleve.nom || "")+
+      " "+
       (eleve.prenom || "")
     ).trim();
 
-  const travaux=remises.filter(r=>
-    (
-      r.eleve || ""
-    ).toLowerCase().includes(
-      recherche
-    )
-  );
+  const travaux=
+    remises.filter(r=>
+      (
+        r.eleve || ""
+      )
+      .toLowerCase()
+      .includes(recherche)
+    );
 
   let total=0;
 
   travaux.forEach(r=>{
-    total+=Number(r.note || 0);
+
+    total+=Number(
+      r.note || 0
+    );
+
   });
 
   const moyenne=
@@ -2963,7 +2916,8 @@ window.afficherResultatEleve=function(){
 
 function actualiserStats(){
 
-  const eleves=getLocal("eleves");
+  const eleves=
+    getLocal("eleves");
 
   const professeurs=
     getLocal("professeurs");
@@ -2977,44 +2931,65 @@ function actualiserStats(){
   const remises=
     getLocal("remises");
 
+
   document.getElementById(
     "statEleves"
-  ).textContent=eleves.length;
+  ).textContent=
+    eleves.length;
+
 
   document.getElementById(
     "statProfesseurs"
-  ).textContent=professeurs.length;
+  ).textContent=
+    professeurs.length;
+
 
   document.getElementById(
     "statClasses"
-  ).textContent=classes.length;
+  ).textContent=
+    classes.length;
+
 
   document.getElementById(
     "statDevoirs"
-  ).textContent=devoirs.length;
+  ).textContent=
+    devoirs.length;
+
 
   document.getElementById(
     "totalElevesStat"
-  ).textContent=eleves.length;
+  ).textContent=
+    eleves.length;
+
 
   document.getElementById(
     "totalProfStat"
-  ).textContent=professeurs.length;
+  ).textContent=
+    professeurs.length;
+
 
   document.getElementById(
     "totalDevoirStat"
-  ).textContent=devoirs.length;
+  ).textContent=
+    devoirs.length;
+
 
   let total=0;
 
   remises.forEach(r=>{
-    total+=Number(r.note || 0);
+
+    total+=Number(
+      r.note || 0
+    );
+
   });
+
 
   const moyenne=
     remises.length
       ? total/remises.length
       : 0;
+
 
   document.getElementById(
     "moyenneStat"
@@ -3037,6 +3012,7 @@ window.supprimerItem=async function(
       "Èske ou sèten ou vle efase done sa a?"
     )
   ){
+
     return;
   }
 
@@ -3059,29 +3035,54 @@ window.supprimerItem=async function(
       data
     );
 
-    if(collectionName==="eleves"){
+
+    if(
+      collectionName==="eleves"
+    ){
+
       afficherEleves();
     }
 
-    if(collectionName==="professeurs"){
+
+    if(
+      collectionName==="professeurs"
+    ){
+
       afficherProfesseurs();
     }
 
-    if(collectionName==="classes"){
+
+    if(
+      collectionName==="classes"
+    ){
+
       afficherClasses();
     }
 
-    if(collectionName==="matieres"){
+
+    if(
+      collectionName==="matieres"
+    ){
+
       afficherMatieres();
     }
 
-    if(collectionName==="devoirs"){
+
+    if(
+      collectionName==="devoirs"
+    ){
+
       afficherDevoirs();
     }
 
-    if(collectionName==="remises"){
+
+    if(
+      collectionName==="remises"
+    ){
+
       afficherRemises();
     }
+
 
     actualiserStats();
 
@@ -3104,41 +3105,66 @@ window.showSection=function(id){
   document
     .querySelectorAll(".section")
     .forEach(section=>{
-      section.classList.remove("active");
+
+      section.classList.remove(
+        "active"
+      );
+
     });
+
 
   const target=
     document.getElementById(id);
 
+
   if(target){
-    target.classList.add("active");
+
+    target.classList.add(
+      "active"
+    );
   }
 
+
   document
-    .querySelectorAll(".sidebar button")
+    .querySelectorAll(
+      ".sidebar button"
+    )
     .forEach(button=>{
-      button.classList.remove("active");
+
+      button.classList.remove(
+        "active"
+      );
+
     });
+
 
   const buttons=
     document.querySelectorAll(
       ".sidebar button"
     );
 
+
   buttons.forEach(button=>{
 
     const onclick=
-      button.getAttribute("onclick") || "";
+      button.getAttribute(
+        "onclick"
+      ) || "";
+
 
     if(
       onclick.includes(
         "showSection('"+id+"'"
       )
     ){
-      button.classList.add("active");
+
+      button.classList.add(
+        "active"
+      );
     }
 
   });
+
 
   closeSidebar();
 };
@@ -3154,6 +3180,7 @@ window.toggleSidebar=function(){
     .getElementById("sidebar")
     .classList.toggle("open");
 };
+
 
 function closeSidebar(){
 
@@ -3174,6 +3201,7 @@ window.setLanguage=function(lang){
     lang
   );
 
+
   if(lang==="fr"){
 
     alert(
@@ -3190,336 +3218,6 @@ window.setLanguage=function(lang){
 
   }
 
-};
-
-
-/* =====================================================
-   ADMIN USERS
-===================================================== */
-
-async function loadUsers(){
-
-  if(
-    String(currentUserData?.role || "")
-      .trim()
-      .toLowerCase()!=="admin"
-  ){
-    return;
-  }
-
-  const box=
-    document.getElementById(
-      "usersList"
-    );
-
-  if(!box)return;
-
-  try{
-
-    const snap=
-      await getDocs(
-        collection(db,"users")
-      );
-
-    if(snap.empty){
-
-      box.innerHTML=`
-        <div class="card">
-          Pa gen lòt itilizatè.
-        </div>
-      `;
-
-      return;
-    }
-
-    let html=`
-      <div class="tableWrap">
-      <table>
-
-      <thead>
-      <tr>
-        <th>Non</th>
-        <th>Email</th>
-        <th>Wòl</th>
-        <th>Status</th>
-        <th>Aksyon</th>
-      </tr>
-      </thead>
-
-      <tbody>
-    `;
-
-    snap.forEach(item=>{
-
-      const data=item.data();
-
-      const role=
-        String(data.role || "pending")
-          .trim()
-          .toLowerCase();
-
-      const status=
-        String(data.status || "pending")
-          .trim()
-          .toLowerCase();
-
-      let badge="badgePending";
-
-      if(role==="admin"){
-        badge="badgeAdmin";
-      }
-
-      else if(role==="student"){
-        badge="badgeStudent";
-      }
-
-      else if(role==="teacher"){
-        badge="badgeTeacher";
-      }
-
-      html+=`
-        <tr>
-
-          <td>
-            ${escapeHtml(
-              data.name || "Itilizatè"
-            )}
-          </td>
-
-          <td>
-            ${escapeHtml(
-              data.email || ""
-            )}
-          </td>
-
-          <td>
-            <span class="badge ${badge}">
-              ${escapeHtml(
-                roleName(role)
-              )}
-            </span>
-          </td>
-
-          <td>
-            ${escapeHtml(status)}
-          </td>
-
-          <td>
-      `;
-
-      if(
-        role==="pending" ||
-        status==="pending"
-      ){
-
-        html+=`
-          <button
-            class="btnSmall btnSuccess"
-            onclick="approveUser('${item.id}')">
-            Apwouve
-          </button>
-        `;
-
-      }
-
-      if(
-        item.id!==currentUser.uid &&
-        role!=="admin"
-      ){
-
-        html+=`
-          <button
-            class="btnSmall btnWarning"
-            onclick="makeTeacher('${item.id}')">
-            Pwofesè
-          </button>
-
-          <button
-            class="btnSmall btnDanger"
-            onclick="deleteUserDocument('${item.id}')">
-            Efase
-          </button>
-        `;
-
-      }
-
-      html+=`
-          </td>
-        </tr>
-      `;
-
-    });
-
-    html+=`
-      </tbody>
-      </table>
-      </div>
-    `;
-
-    box.innerHTML=html;
-
-  }catch(error){
-
-    console.error(
-      "loadUsers:",
-      error
-    );
-
-    box.innerHTML=`
-      <div class="card">
-        <strong>Erè pandan chajman itilizatè yo.</strong>
-        <br><br>
-        ${escapeHtml(error.message)}
-      </div>
-    `;
-  }
-}
-
-
-/* =====================================================
-   APPROVE USER
-===================================================== */
-
-window.approveUser=async function(uid){
-
-  if(
-    String(currentUserData?.role || "")
-      .trim()
-      .toLowerCase()!=="admin"
-  ){
-
-    alert(
-      "Se admin sèlman ki ka fè sa."
-    );
-
-    return;
-  }
-
-  try{
-
-    await setDoc(
-      doc(db,"users",uid),
-      {
-        role:"student",
-        status:"approved",
-        approvedAt:
-          new Date().toISOString(),
-        approvedBy:
-          currentUser.uid
-      },
-      {
-        merge:true
-      }
-    );
-
-    await loadUsers();
-
-    alert(
-      "Itilizatè a apwouve."
-    );
-
-  }catch(error){
-
-    alert(
-      "Erè: "+error.message
-    );
-  }
-};
-
-
-/* =====================================================
-   MAKE TEACHER
-===================================================== */
-
-window.makeTeacher=async function(uid){
-
-  if(
-    String(currentUserData?.role || "")
-      .trim()
-      .toLowerCase()!=="admin"
-  ){
-
-    alert(
-      "Se admin sèlman ki ka fè sa."
-    );
-
-    return;
-  }
-
-  try{
-
-    await setDoc(
-      doc(db,"users",uid),
-      {
-        role:"teacher",
-        status:"approved",
-        approvedAt:
-          new Date().toISOString(),
-        approvedBy:
-          currentUser.uid
-      },
-      {
-        merge:true
-      }
-    );
-
-    await loadUsers();
-
-    alert(
-      "Itilizatè a mete kòm pwofesè."
-    );
-
-  }catch(error){
-
-    alert(
-      "Erè: "+error.message
-    );
-  }
-};
-
-
-/* =====================================================
-   DELETE USER DOCUMENT
-===================================================== */
-
-window.deleteUserDocument=
-async function(uid){
-
-  if(
-    String(currentUserData?.role || "")
-      .trim()
-      .toLowerCase()!=="admin"
-  ){
-
-    alert(
-      "Se admin sèlman ki ka fè sa."
-    );
-
-    return;
-  }
-
-  if(
-    !confirm(
-      "Èske ou vle efase itilizatè sa a?"
-    )
-  ){
-    return;
-  }
-
-  try{
-
-    await deleteDoc(
-      doc(db,"users",uid)
-    );
-
-    await loadUsers();
-
-  }catch(error){
-
-    alert(
-      "Erè: "+error.message
-    );
-  }
 };
 
 
